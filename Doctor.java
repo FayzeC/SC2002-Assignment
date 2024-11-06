@@ -1,11 +1,11 @@
+import java.io.IOException;
+
 public class Doctor extends User {
     public static final int LOGOUT_OPTION = 9; // Define a constant for logout option
-    private String gender;
-    private int age;
+    private String age;
 
-    public Doctor(String hospitalID, String name, String role, String gender, int age) {
-        super(hospitalID, name, role);
-        this.gender = gender;
+    public Doctor(String hospitalID, String name, String password, String role, String gender, String age, boolean firstLogin) {
+        super(hospitalID, name, password, role, gender, firstLogin);
         this.age = age;
     }
 
@@ -26,10 +26,9 @@ public class Doctor extends User {
     }
 
     @Override
-    public void handleOption(int option) {
+    public void handleOption(int option) throws IOException {
         switch (option) {
             case 1:
-
                 break;
             case 2:
                 break;
@@ -44,7 +43,7 @@ public class Doctor extends User {
             case 7:
                 break;
             case 8:
-                changePassword();
+                changePassword(FilePaths.STAFF_LIST_PATH);
                 break;
             default:
                 System.out.println("Invalid option");
@@ -53,15 +52,4 @@ public class Doctor extends User {
 
     // Getters
     public int getLogoutOption() { return LOGOUT_OPTION; }
-
-    // Setters
-
-    public String toString() { // Remove this when submitting final version
-        return "Doctor{" +
-//                "Staff ID='" + getHospitalID() + '\'' +
-//                ", Role=" + role + '\'' +
-                ", Gender='" + gender + '\'' +
-                ", Age='" + age + '\'' +
-                '}';
-    }
 }

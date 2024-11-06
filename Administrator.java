@@ -1,11 +1,11 @@
+import java.io.IOException;
+
 public class Administrator extends User {
     public static final int LOGOUT_OPTION = 6; // Define a constant for logout option
-    private String gender;
-    private int age;
+    private String age;
 
-    public Administrator(String hospitalID, String name, String role, String gender, int age) {
-        super(hospitalID, name, role);
-        this.gender = gender;
+    public Administrator(String hospitalID, String name, String password, String role, String gender, String age, boolean firstLogin) {
+        super(hospitalID, name, password, role, gender, firstLogin);
         this.age = age;
     }
 
@@ -23,7 +23,7 @@ public class Administrator extends User {
     }
 
     @Override
-    public void handleOption(int option) {
+    public void handleOption(int option) throws IOException {
         switch (option) {
             case 1:
 
@@ -35,7 +35,7 @@ public class Administrator extends User {
             case 4:
                 break;
             case 5:
-                changePassword();
+                changePassword(FilePaths.STAFF_LIST_PATH);
                 break;
             default:
                 System.out.println("Invalid option");
@@ -44,16 +44,4 @@ public class Administrator extends User {
 
     // Getters
     public int getLogoutOption() { return LOGOUT_OPTION; }
-
-    // Setters
-
-
-    public String toString() { // Remove this when submitting final version
-        return "Administrator{" +
-//                "Staff ID='" + staffID + '\'' +
-//                ", Role=" + role + '\'' +
-                ", Gender='" + gender + '\'' +
-                ", Age='" + age + '\'' +
-                '}';
-    }
 }

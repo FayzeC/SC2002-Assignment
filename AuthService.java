@@ -1,67 +1,104 @@
 import java.util.List;
 import java.util.Scanner;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class AuthService {
     private List<Patient> patientList;
-    private List<Pharmacist> pharmacistList;
-    private List<Doctor> doctorList;
-    private List<Administrator> administratorList;
+    private List<Doctor> doctorList = new ArrayList<>();
+    private List<Pharmacist> pharmacistList = new ArrayList<>();
+    private List<Administrator> administratorList = new ArrayList<>();
+    private List<AppointmentOutcomeRecord> apptOutcomeRecordList = new ArrayList<>();
+    private List<Appointment> appointmentList = new ArrayList<>();
+    private List<Inventory> inventoryList = new ArrayList<>();
 
-    public AuthService(List<Patient> patientList, List<Doctor> doctorList, List<Pharmacist> pharmacistList, List<Administrator> administratorList) {
-        this.patientList = patientList;
-        this.pharmacistList = pharmacistList;
-        this.doctorList = doctorList;
-        this.administratorList = administratorList;
+    public AuthService() {
+        loadData(); // Load data initially
     }
 
-    public User login() {
-        Scanner scanner = new Scanner(System.in);
-        String choice;
+    // Method to load data from Excel
+    private void loadData() {
+        try {
+            // Clear the existing lists
+            if(patientList != null ) { patientList.clear(); }
+            if(doctorList != null ) { doctorList.clear(); }
+            if(pharmacistList != null ) { pharmacistList.clear(); }
+            if(administratorList != null ) { administratorList.clear(); }
+            if(apptOutcomeRecordList != null ) { apptOutcomeRecordList.clear(); }
+            if(appointmentList != null ) { appointmentList.clear(); }
+            if(inventoryList != null ) { inventoryList.clear(); }
 
+            patientList = ExcelDataLoader.loadPatients(FilePaths.PATIENT_LIST_PATH);
+            ExcelDataLoader.loadStaff(FilePaths.STAFF_LIST_PATH, pharmacistList, doctorList, administratorList);
+            apptOutcomeRecordList = ExcelDataLoader.loadApptOutcomeRecord(FilePaths.APPOINTMENT_OUTCOME_RECORD_PATH);
+            appointmentList = ExcelDataLoader.loadAppointments(FilePaths.APPOINTMENT_LIST_PATH);
+            inventoryList = ExcelDataLoader.loadInventory(FilePaths.INVENTORY_LIST_PATH);
+        } catch (IOException e) {
+            System.err.println("Failed to load data: " + e.getMessage());
+        }
+    }
+
+    public User login() throws IOException {
+        // Reload data every time a login attempt is made
+        loadData();
+
+        Scanner sc = new Scanner(System.in);
         System.out.print("Enter Hospital ID: ");
-        String id = scanner.nextLine();
+        String hospitalID = sc.nextLine();
 
         System.out.print("Enter Password: ");
-        String password = scanner.nextLine();
+        String password = sc.nextLine();
 
         User user = null;
 
         // Determine the list to search based on the prefix of the ID
-        if (id.startsWith("D")) {
-            user = getUserById(id, doctorList);
-        } else if (id.startsWith("A")) {
-            user = getUserById(id, administratorList);
-        } else if (id.startsWith("P")) {
+        if (hospitalID.startsWith("D")) {
+            user = getUserById(hospitalID, doctorList);
+        } else if (hospitalID.startsWith("A")) {
+            user = getUserById(hospitalID, administratorList);
+        } else if (hospitalID.startsWith("P")) {
             // Check both patient and pharmacist lists if ID starts with 'P'
-            user = getUserById(id, patientList);
+            user = getUserById(hospitalID, patientList);
             if (user == null) {  // If not found in patient list, check pharmacist list
-                user = getUserById(id, pharmacistList);
+                user = getUserById(hospitalID, pharmacistList);
             }
         }
 
         // Authenticate if user is found
         if (user != null && user.authenticate(password)) {
+            String choice;
             System.out.println("Login successful. Welcome " + user.getRole() + " " + user.getName() + "!");
 
-            if (user.getFirstLogin()) { // Ask user if they want to change password after initial login
-                System.out.println("This is your first login.");
+            if (user.getFirstLogin()) { // If this is the first login
+                String filename = "";
+                System.out.println("This is your first login. We recommend you change your password for security purposes.");
+
+                // Prompt user to change password
                 do {
-                    System.out.print("Do you want to change your password?\nEnter Y or N: ");
-                    choice = scanner.nextLine();
+                    System.out.print("Do you want to change your password? (Y/N): ");
+                    choice = sc.nextLine();
+
+                    if(user.getRole().equals("Patient")) {
+                        filename = FilePaths.PATIENT_LIST_PATH;
+                    }else{
+                        filename = FilePaths.STAFF_LIST_PATH;
+                    }
+
                     if (choice.equalsIgnoreCase("Y")) {
-                        user.changePassword();
-//                        user.setFirstLogin(false);
+                        user.changePassword(filename);
+                        user.setFirstLogin(filename);
                         break;
                     } else if (choice.equalsIgnoreCase("N")) {
+                        user.setFirstLogin(filename);
                         break;
                     } else {
-                        System.out.println("Invalid input. Try again.");
+                        System.out.println("Invalid input. Please try again.");
                     }
                 } while (true);
             }
             return user;
         } else {
-            System.out.println("Invalid credentials.");
+            System.out.println("Invalid credentials.\n");
             return null;
         }
     }
@@ -73,6 +110,6 @@ public class AuthService {
                 return user;
             }
         }
-        return null; // If no user found
+        return null; // Return null if no user is found
     }
 }

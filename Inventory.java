@@ -9,11 +9,9 @@ public class Inventory {
         this.lowStockAlert = lowStockAlert;
     }
 
-    public String toString() { // Remove this when submitting final version
-        return "Inventory{" +
-                "Medicine Name='" + medicineName + '\'' +
-                ", Initial Stock='" + initialStock + '\'' +
-                ", Low Stock Alert=" + lowStockAlert +
-                '}';
+    public void print() { // Remove after final submission this is just to check if data is loaded correctly
+        System.out.println("Medicine Name: " + medicineName);
+        System.out.println("Initial Stock: " + initialStock);
+        System.out.println("Low Stock Alert: " + lowStockAlert);
     }
 }

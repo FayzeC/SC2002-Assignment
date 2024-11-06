@@ -1,7 +1,8 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 public class RoleAccessController {
-    public static void accessUserFeatures(User user) {
+    public static void accessUserFeatures(User user) throws IOException {
         boolean isLoggedIn = true;
         Scanner scanner = new Scanner(System.in);
 

@@ -1,24 +1,26 @@
+import java.io.IOException;
+
 public class Patient extends User {
     public static final int LOGOUT_OPTION = 10; // Define a constant for logout option
     private String dob;
     private String gender;
     private String bloodType;
     private String email;
+    private String doctorAssigned;
     private String pastDiagnosis;
     private String pastTreatment;
 
     // Inject implementations
-    private viewMedicalRecords viewMedicalRecords;
-    private PersonalInfoUpdater personalInfoUpdater;
+    private InformationAccess informationAccess;
 
-    public Patient(String hospitalID, String name, String role, String dob, String gender, String bloodType, String email) {
-        super(hospitalID, name, role);
+    public Patient(String hospitalID, String name, String password, String dob, String gender, String bloodType, String email, String doctorAssigned, String pastDiagnosis, String pastTreatment, boolean firstLogin, String role) {
+        super(hospitalID, name, password, role, gender, firstLogin);
         this.dob = dob;
-        this.gender = gender;
         this.bloodType = bloodType;
         this.email = email;
-        this.pastDiagnosis = "NA";
-        this.pastTreatment = "NA";
+        this.doctorAssigned = doctorAssigned;
+        this.pastDiagnosis = pastDiagnosis;
+        this.pastTreatment = pastTreatment;
     }
 
     @Override
@@ -39,13 +41,13 @@ public class Patient extends User {
     }
 
     @Override
-    public void handleOption(int option) {
+    public void handleOption(int option) throws IOException {
         switch (option) {
             case 1:
-                viewMedicalRecords.viewMedicalRecords(this);
+                informationAccess.viewMedicalRecords(this);
                 break;
             case 2:
-                personalInfoUpdater.updatePersonalInformation(this);
+                informationAccess.updatePersonalInformation(this);
                 break;
             case 3:
                 break;
@@ -60,11 +62,17 @@ public class Patient extends User {
             case 8:
                 break;
             case 9:
-                changePassword();
+                changePassword(FilePaths.PATIENT_LIST_PATH);
                 break;
             default:
                 System.out.println("Invalid option");
         }
+    }
+
+    public void print(){ // Remove after final submission this is just to check if data is loaded correctly
+        System.out.println("Name: " + getName());
+        System.out.println("Password: " + getPassword());
+        System.out.println("Role: " + getRole());
     }
 
     // Getters
@@ -72,34 +80,22 @@ public class Patient extends User {
 
     public String getDoB() { return dob; }
 
-    public String getGender() { return gender; }
-
     public String getEmail() { return email; }
 
     public String getBloodType() { return bloodType; }
+
+    public String getDoctorAssigned() { return doctorAssigned; }
 
     public String getPastDiagnosis() { return pastDiagnosis; }
 
     public String getPastTreatment() { return pastTreatment; }
 
     // Setters
-    public void setPersonalInfoUpdater(PersonalInfoUpdater updater) { this.personalInfoUpdater = updater; }
-
-    public void setViewMedicalRecords(viewMedicalRecords records) { this.viewMedicalRecords = records; }
+    public void setInformationAccess(InformationAccess informationAccess) { this.informationAccess = informationAccess; }
 
     public void setDob(String dob) { this.dob = dob; }
 
     public void setBloodType(String bloodType) { this.bloodType = bloodType; }
 
     public void setEmail(String email) { this.email = email; }
-
-    public String toString() { // Remove this when submitting final version
-        return "Patient{" +
-//                "patientId='" + patientID + '\'' +
-                ", dateOfBirth=" + dob +
-                ", gender='" + gender + '\'' +
-                ", bloodType='" + bloodType + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
 }
