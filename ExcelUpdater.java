@@ -4,12 +4,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 
 public class ExcelUpdater {
 
     // Updates a specific cell in the Excel sheet based on header, new value, and hospitalID
-    public void updateHospitalList(String filePath, String hospitalID, String header, String newValue) throws IOException {
+    public void updater(String filePath, String hospitalID, String header, String newValue) throws IOException {
         FileInputStream fis = new FileInputStream(filePath);
         Workbook workbook = new XSSFWorkbook(fis);
         Sheet sheet = workbook.getSheetAt(0);
