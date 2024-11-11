@@ -20,19 +20,33 @@ public class AuthService {
     private void loadData() {
         try {
             // Clear the existing lists
-            if(patientList != null ) { patientList.clear(); }
-            if(doctorList != null ) { doctorList.clear(); }
-            if(pharmacistList != null ) { pharmacistList.clear(); }
-            if(administratorList != null ) { administratorList.clear(); }
-            if(apptOutcomeRecordList != null ) { apptOutcomeRecordList.clear(); }
-            if(appointmentList != null ) { appointmentList.clear(); }
-            if(inventoryList != null ) { inventoryList.clear(); }
+            if (patientList != null) {
+                patientList.clear();
+            }
+            if (doctorList != null) {
+                doctorList.clear();
+            }
+            if (pharmacistList != null) {
+                pharmacistList.clear();
+            }
+            if (administratorList != null) {
+                administratorList.clear();
+            }
+            if (apptOutcomeRecordList != null) {
+                apptOutcomeRecordList.clear();
+            }
+            if (appointmentList != null) {
+                appointmentList.clear();
+            }
+            if (inventoryList != null) {
+                inventoryList.clear();
+            }
 
-            patientList = ExcelDataLoader.loadPatients(FilePaths.PATIENT_LIST_PATH);
-            ExcelDataLoader.loadStaff(FilePaths.STAFF_LIST_PATH, pharmacistList, doctorList, administratorList);
-            apptOutcomeRecordList = ExcelDataLoader.loadApptOutcomeRecord(FilePaths.APPOINTMENT_OUTCOME_RECORD_PATH);
-            appointmentList = ExcelDataLoader.loadAppointments(FilePaths.APPOINTMENT_LIST_PATH);
-            inventoryList = ExcelDataLoader.loadInventory(FilePaths.INVENTORY_LIST_PATH);
+            patientList = CSVDataLoader.loadPatients(FilePaths.PATIENT_LIST_PATH);
+            CSVDataLoader.loadStaff(FilePaths.STAFF_LIST_PATH, pharmacistList, doctorList, administratorList);
+            apptOutcomeRecordList = CSVDataLoader.loadApptOutcomeRecord(FilePaths.APPOINTMENT_OUTCOME_RECORD_PATH);
+            appointmentList = CSVDataLoader.loadAppointments(FilePaths.APPOINTMENT_LIST_PATH);
+            inventoryList = CSVDataLoader.loadInventory(FilePaths.INVENTORY_LIST_PATH);
         } catch (IOException e) {
             System.err.println("Failed to load data: " + e.getMessage());
         }
@@ -59,7 +73,7 @@ public class AuthService {
         } else if (hospitalID.startsWith("P")) {
             // Check both patient and pharmacist lists if ID starts with 'P'
             user = getUserById(hospitalID, patientList);
-            if (user == null) {  // If not found in patient list, check pharmacist list
+            if (user == null) { // If not found in patient list, check pharmacist list
                 user = getUserById(hospitalID, pharmacistList);
             }
         }
@@ -71,16 +85,17 @@ public class AuthService {
 
             if (user.getFirstLogin()) { // If this is the first login
                 String filename = "";
-                System.out.println("This is your first login. We recommend you change your password for security purposes.");
+                System.out.println(
+                        "This is your first login. We recommend you change your password for security purposes.");
 
                 // Prompt user to change password
                 do {
                     System.out.print("Do you want to change your password? (Y/N): ");
                     choice = sc.nextLine();
 
-                    if(user.getRole().equals("Patient")) {
+                    if (user.getRole().equals("Patient")) {
                         filename = FilePaths.PATIENT_LIST_PATH;
-                    }else{
+                    } else {
                         filename = FilePaths.STAFF_LIST_PATH;
                     }
 

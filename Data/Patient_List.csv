@@ -1,0 +1,4 @@
+Patient ID,Name,Password,Date of Birth,Gender,Blood Type,Contact Information,Doctor Assigned,Past Diagnosis,Past Treatment,First Login
+P1001,Faye,password,01-01-2001,Female,A-,aa@.com,NA,NA,NA,No
+P1002,Bob Stone,password,1975-11-22,Male,B+,bob.stone@example.com,NA,NA,NA,No
+P1003,Charlie White,password,1990-07-08,Male,O-,charlie.white@example.com,NA,NA,NA,No
