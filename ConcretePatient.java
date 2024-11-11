@@ -24,7 +24,7 @@ public class ConcretePatient extends Patient implements InformationAccess {
 
     @Override
     public void updatePersonalInformation(User user) throws IOException {
-        ExcelUpdater excelUpdater = new ExcelUpdater();
+//        ExcelUpdater excelUpdater = new ExcelUpdater();
         Scanner sc = new Scanner(System.in);
         boolean exec = true;
 
@@ -47,7 +47,7 @@ public class ConcretePatient extends Patient implements InformationAccess {
                     System.out.print("\nEnter New Name: ");
                     String name = sc.nextLine();
                     user.setName(name);
-                    excelUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), "Name", name);
+                    CSVUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), "Name", name);
                     System.out.println("Name updated successfully.");
                     break;
                 case 2:
@@ -68,7 +68,7 @@ public class ConcretePatient extends Patient implements InformationAccess {
                             validDate = true;
                             String dob = String.format("%02d-%02d-%04d", day, month, year);
                             setDob(dob);
-                            excelUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), "Date of Birth", dob);
+                            CSVUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), "Date of Birth", dob);
                             System.out.println("Date of birth updated successfully.");
                         } else {
                             System.out.println("Invalid date. Please enter a valid date.");
@@ -83,7 +83,7 @@ public class ConcretePatient extends Patient implements InformationAccess {
                         if(email.contains("@")){
                             validEmail = true;
                             setEmail(email);
-                            excelUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), "Contact Information", email);
+                            CSVUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), "Contact Information", email);
                             System.out.println("Email updated successfully.");
                         }else{
                             System.out.println("Invalid email. Please enter a valid email address. Be sure to include '@'");
@@ -98,7 +98,7 @@ public class ConcretePatient extends Patient implements InformationAccess {
                         if(bloodType.matches("A\\+|A-|B\\+|B-|AB\\+|AB-|O\\+|O-")){
                             validBloodType = true;
                             setBloodType(bloodType);
-                            excelUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), "Blood Type", bloodType);
+                            CSVUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), "Blood Type", bloodType);
                             System.out.println("Blood type updated successfully.");
                         }else{
                             System.out.println("Invalid blood type. Please enter a valid blood type.");

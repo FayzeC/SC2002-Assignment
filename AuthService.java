@@ -28,11 +28,11 @@ public class AuthService {
             if(appointmentList != null ) { appointmentList.clear(); }
             if(inventoryList != null ) { inventoryList.clear(); }
 
-            patientList = ExcelDataLoader.loadPatients(FilePaths.PATIENT_LIST_PATH);
-            ExcelDataLoader.loadStaff(FilePaths.STAFF_LIST_PATH, pharmacistList, doctorList, administratorList);
-            apptOutcomeRecordList = ExcelDataLoader.loadApptOutcomeRecord(FilePaths.APPOINTMENT_OUTCOME_RECORD_PATH);
-            appointmentList = ExcelDataLoader.loadAppointments(FilePaths.APPOINTMENT_LIST_PATH);
-            inventoryList = ExcelDataLoader.loadInventory(FilePaths.INVENTORY_LIST_PATH);
+            patientList = CSVDataLoader.loadPatients(FilePaths.PATIENT_LIST_PATH);
+            CSVDataLoader.loadStaff(FilePaths.STAFF_LIST_PATH, pharmacistList, doctorList, administratorList);
+            apptOutcomeRecordList = CSVDataLoader.loadApptOutcomeRecord(FilePaths.APPOINTMENT_OUTCOME_RECORD_PATH);
+            appointmentList = CSVDataLoader.loadAppointments(FilePaths.APPOINTMENT_LIST_PATH);
+            inventoryList = CSVDataLoader.loadInventory(FilePaths.INVENTORY_LIST_PATH);
         } catch (IOException e) {
             System.err.println("Failed to load data: " + e.getMessage());
         }

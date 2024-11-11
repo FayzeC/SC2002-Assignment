@@ -8,7 +8,7 @@ public abstract class User {
     private String role;
     private String gender;
     private boolean firstLogin;   // Flag to check if it's the user's first login
-    ExcelUpdater excelUpdater = new ExcelUpdater();
+//    CSVUpdater csvUpdater = new CSVUpdater();
 
     public User(String hospitalID,  String name, String password, String role, String gender, boolean firstLogin) {
         this.hospitalID = hospitalID;
@@ -26,7 +26,7 @@ public abstract class User {
         String newPassword = scanner.nextLine();
         this.password = newPassword;
         System.out.println("Password changed successfully.");
-        excelUpdater.updater(filePath, hospitalID, "Password", newPassword);
+        CSVUpdater.updater(filePath, hospitalID, "Password", newPassword);
     }
 
     // Method to authenticate user
@@ -54,7 +54,7 @@ public abstract class User {
     // Setter
     public void setFirstLogin(String filePath) throws IOException {
         firstLogin = false;
-        excelUpdater.updater(filePath, hospitalID, "First Login", "No");
+        CSVUpdater.updater(filePath, hospitalID, "First Login", "No");
     }
 
     public void setName(String name) { this.name = name; }
