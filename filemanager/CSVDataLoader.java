@@ -1,6 +1,7 @@
 package filemanager;
 
 import base.*;
+import inventorysystem.Inventory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

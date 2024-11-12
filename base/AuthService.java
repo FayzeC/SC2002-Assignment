@@ -2,6 +2,7 @@ package base;
 
 import filemanager.CSVDataLoader;
 import filemanager.FilePaths;
+import inventorysystem.Inventory;
 
 import java.util.List;
 import java.util.Scanner;

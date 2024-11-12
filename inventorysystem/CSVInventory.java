@@ -1,7 +1,5 @@
 package inventorysystem;
 
-import base.Inventory;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;

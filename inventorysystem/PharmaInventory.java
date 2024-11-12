@@ -1,6 +1,5 @@
 package inventorysystem;
 
-import base.Inventory;
 import filemanager.FilePaths;
 
 import java.io.IOException;
