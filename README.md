@@ -20,4 +20,4 @@ The patient is allowed to cancel/reschedule appointments even if it is still in 
 ALTERNATE FLOW for this one- I'm looking into implementing the following: If the doctor accepts the appointment before the patient cancels/reschedules then for the doctor's upcoming appointment list it should reflect that the patient CANCELLED/RESCHEDULED rather than just making it UNRESERVED 
 
 -----------------
-Update: wrote the code for doctor viewing the medical files for all the patients under him/her. Need to just complete the update thing cuz and then should be done because whatever update the doctor makes here gets added to the AOR.csv 
+Update: wrote the code for doctor viewing the medical files for all the patients under him/her. Need to just complete the patient viewing AOR records and the doctor update thing and then should be done because whatever update the doctor makes here gets added to the AOR.csv 
