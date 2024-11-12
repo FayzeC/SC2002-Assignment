@@ -17,7 +17,7 @@ public class AdminInventory extends InventoryManagement {
     }
 
     // Method to add a new item to the inventory
-    private void addInventoryItem() {
+    public void addInventoryItem() {
         System.out.print("\nEnter Name of Item to be added: ");
         String name = sc.nextLine();
         System.out.print("\nEnter Number of Item to be added: ");
@@ -35,7 +35,7 @@ public class AdminInventory extends InventoryManagement {
     }
 
     // Method to remove an item from the inventory
-    private void removeInventoryItem() {
+    public void removeInventoryItem() {
         System.out.print("\nEnter Name of Item to be removed: ");
         String name = sc.nextLine();
 
@@ -51,7 +51,7 @@ public class AdminInventory extends InventoryManagement {
     }
 
     // Method to update the stock level of an existing item
-    private void updateInventoryItem() {
+    public void updateInventoryItem() {
         System.out.print("\nEnter Name of Item to be updated: ");
         String name = sc.nextLine();
         System.out.print("\nEnter updated stock: ");
@@ -67,7 +67,7 @@ public class AdminInventory extends InventoryManagement {
     }
 
     // Method to update the low stock alert level for an existing item
-    private void updateLowStockAlert() {
+    public void updateLowStockAlert() {
         System.out.print("\nEnter Name of Item to be updated: ");
         String name = sc.nextLine();
         System.out.print("\nEnter new low stock level of Item: ");
@@ -134,7 +134,7 @@ public class AdminInventory extends InventoryManagement {
         try {
             // Update stock level in the Excel file
             inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, selectedInventory.getMedicineName(),
-                    "Stock", String.valueOf(newStockLevel));
+                    "Initial Stock", String.valueOf(newStockLevel));
             // Reset the replenish request count to 0 after fulfilling
             inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, selectedInventory.getMedicineName(),
                     "Replenish Request", "0");
