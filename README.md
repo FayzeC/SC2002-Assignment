@@ -5,8 +5,6 @@ Package basic has all of Faye's classes in them- I've modified the Patient class
 Patient Menu: Case 8: View Past Appointments Outcome Records left
 
 Doctor Menu cases left- 
-Case 1: View Patient Medical Records ---- done
-Case 2: Update Patient Medical Records
 Case 7: Record Appointment Outcome
 
 Package Appointment System consists of (almost) all the codes for my part-
