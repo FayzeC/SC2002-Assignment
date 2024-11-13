@@ -1,8 +1,8 @@
 package base;
-
+import appointmentsystem.Appointment;
 import filemanager.CSVDataLoader;
 import filemanager.FilePaths;
-import inventorysystem.Inventory;
+import roles.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -16,7 +16,6 @@ public class AuthService {
     private List<Administrator> administratorList = new ArrayList<>();
     private List<AppointmentOutcomeRecord> apptOutcomeRecordList = new ArrayList<>();
     private List<Appointment> appointmentList = new ArrayList<>();
-    private List<Inventory> inventoryList = new ArrayList<>();
 
     public AuthService() {
         loadData(); // Load data initially
@@ -32,13 +31,11 @@ public class AuthService {
             if(administratorList != null ) { administratorList.clear(); }
             if(apptOutcomeRecordList != null ) { apptOutcomeRecordList.clear(); }
             if(appointmentList != null ) { appointmentList.clear(); }
-            if(inventoryList != null ) { inventoryList.clear(); }
 
             patientList = CSVDataLoader.loadPatients(FilePaths.PATIENT_LIST_PATH);
             CSVDataLoader.loadStaff(FilePaths.STAFF_LIST_PATH, pharmacistList, doctorList, administratorList);
             apptOutcomeRecordList = CSVDataLoader.loadApptOutcomeRecord(FilePaths.APPOINTMENT_OUTCOME_RECORD_PATH);
             appointmentList = CSVDataLoader.loadAppointments(FilePaths.APPOINTMENT_LIST_PATH);
-            inventoryList = CSVDataLoader.loadInventory(FilePaths.INVENTORY_LIST_PATH);
         } catch (IOException e) {
             System.err.println("Failed to load data: " + e.getMessage());
         }
@@ -78,29 +75,14 @@ public class AuthService {
             if (user.getFirstLogin()) { // If this is the first login
                 String filename = "";
                 System.out.println("This is your first login. We recommend you change your password for security purposes.");
+                if(user.getRole().equals("Patient")) {
+                    filename = FilePaths.PATIENT_LIST_PATH;
+                }else{
+                    filename = FilePaths.STAFF_LIST_PATH;
+                }
 
-                // Prompt user to change password
-                do {
-                    System.out.print("Do you want to change your password? (Y/N): ");
-                    choice = sc.nextLine();
-
-                    if(user.getRole().equals("base.Patient")) {
-                        filename = FilePaths.PATIENT_LIST_PATH;
-                    }else{
-                        filename = FilePaths.STAFF_LIST_PATH;
-                    }
-
-                    if (choice.equalsIgnoreCase("Y")) {
-                        user.changePassword(filename);
-                        user.setFirstLogin(filename);
-                        break;
-                    } else if (choice.equalsIgnoreCase("N")) {
-                        user.setFirstLogin(filename);
-                        break;
-                    } else {
-                        System.out.println("Invalid input. Please try again.");
-                    }
-                } while (true);
+                user.changePassword(filename);
+                user.setFirstLogin(filename);
             }
             return user;
         } else {
