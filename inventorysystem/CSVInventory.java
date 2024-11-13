@@ -123,23 +123,25 @@ public class CSVInventory {
     }
 
     public void removeInventoryItem(String filePath, String medicineName) throws IOException {
-        File tempFile = new File("temp.csv");
+        List<String[]> lines = new ArrayList<>();
         boolean removed = false;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath));
-             BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
-
-            String line = br.readLine();
-            bw.write(line); // Write header
-            bw.newLine();
+        // Read the file and store its content
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            boolean headerProcessed = false;
 
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
-                if (!fields[0].trim().equalsIgnoreCase(medicineName)) {
-                    bw.write(line);
-                    bw.newLine();
+
+                // Add each row to our lines list for potential updates
+                if (!headerProcessed) {
+                    lines.add(fields); // Add the header row
+                    headerProcessed = true;
+                } else if (!fields[0].trim().equalsIgnoreCase(medicineName)) {
+                    lines.add(fields); // Add rows that don't match the medicineName
                 } else {
-                    removed = true;
+                    removed = true; // Mark as removed if we find the medicineName
                 }
             }
         }
@@ -148,9 +150,12 @@ public class CSVInventory {
             throw new IllegalArgumentException("Medicine name \"" + medicineName + "\" not found in the CSV file.");
         }
 
-        // Replace original file with updated temp file
-        if (!tempFile.renameTo(new File(filePath))) {
-            throw new IOException("Failed to replace the original CSV file.");
+        // Write the updated data back to the CSV file
+        try (PrintWriter pw = new PrintWriter(new FileWriter(filePath))) {
+            for (String[] row : lines) {
+                pw.println(String.join(",", row));
+            }
         }
     }
+
 }

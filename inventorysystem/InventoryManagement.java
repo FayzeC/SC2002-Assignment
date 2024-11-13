@@ -18,8 +18,17 @@ public class InventoryManagement {
     }
 
     public void viewInventory() {
+        try {
+            // Reload the inventory list from the CSV file
+            this.inventoryList = CSVInventory.loadInventory(FilePaths.INVENTORY_LIST_PATH);
+        } catch (IOException e) {
+            System.err.println("Failed to load inventory: " + e.getMessage());
+            return; // Exit if loading fails
+        }
+
+        // Display the inventory items
         for (Inventory item : inventoryList) {
-            item.print(); // Assuming inventorysystem.Inventory has a print method for viewing details
+            item.print(); // Assuming Inventory has a print method for viewing details
         }
     }
 
