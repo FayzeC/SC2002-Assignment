@@ -19,10 +19,34 @@ public class AdminInventory extends InventoryManagement {
     public void addInventoryItem() {
         System.out.print("\nEnter Name of Item to be added: ");
         String name = sc.nextLine();
-        System.out.print("\nEnter Number of Item to be added: ");
-        String stock = sc.nextLine();
-        System.out.print("\nEnter low stock level of Item to be added: ");
-        String lowStockLevel = sc.nextLine();
+
+        String stock;
+        while (true) {
+            System.out.print("\nEnter Number of Items to be added (integer only): ");
+            stock = sc.nextLine();
+
+            // Validate if the input is an integer
+            try {
+                Integer.parseInt(stock);
+                break; // Exit loop if the input is valid
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+            }
+        }
+
+        String lowStockLevel;
+        while (true) {
+            System.out.print("\nEnter low stock level of Item to be added (integer only): ");
+            lowStockLevel = sc.nextLine();
+
+            // Validate if the input is an integer
+            try {
+                Integer.parseInt(lowStockLevel);
+                break; // Exit loop if the input is valid
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+            }
+        }
 
         try {
             // Call the addInventoryItem method to add a new row
@@ -33,6 +57,7 @@ public class AdminInventory extends InventoryManagement {
         }
     }
 
+
     // Method to remove an item from the inventory
     public void removeInventoryItem() {
         System.out.print("\nEnter Name of Item to be removed: ");
@@ -41,7 +66,6 @@ public class AdminInventory extends InventoryManagement {
         try {
             // Call the removeInventoryItem method to delete the row
             inventoryUpdater.removeInventoryItem(FilePaths.INVENTORY_LIST_PATH, name);
-            System.out.println("Item removed successfully!");
         } catch (IOException e) {
             System.err.println("Failed to remove item: " + e.getMessage());
         } catch (IllegalArgumentException e) {
@@ -53,33 +77,59 @@ public class AdminInventory extends InventoryManagement {
     public void updateInventoryItem() {
         System.out.print("\nEnter Name of Item to be updated: ");
         String name = sc.nextLine();
-        System.out.print("\nEnter updated stock: ");
-        String stock = sc.nextLine();
+
+        String stock;
+        while (true) {
+            System.out.print("\nEnter updated stock (integer only): ");
+            stock = sc.nextLine();
+
+            // Validate if the input is an integer
+            try {
+                Integer.parseInt(stock);
+                break; // Exit loop if the input is valid
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+            }
+        }
 
         try {
             // Update the stock column for the specified item
-            inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, name, "Stock", stock);
+            inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, name, "Initial Stock", stock);
             System.out.println("Stock updated successfully!");
         } catch (IOException e) {
             System.err.println("Failed to update stock: " + e.getMessage());
         }
     }
 
+
     // Method to update the low stock alert level for an existing item
     public void updateLowStockAlert() {
         System.out.print("\nEnter Name of Item to be updated: ");
         String name = sc.nextLine();
-        System.out.print("\nEnter new low stock level of Item: ");
-        String lowStockLevel = sc.nextLine();
+
+        String lowStockLevel;
+        while (true) {
+            System.out.print("\nEnter new low stock level of Item (integer only): ");
+            lowStockLevel = sc.nextLine();
+
+            // Validate if the input is an integer
+            try {
+                Integer.parseInt(lowStockLevel);
+                break; // Exit loop if the input is valid
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+            }
+        }
 
         try {
             // Update the low stock alert level for the specified item
-            inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, name, "Low Stock Level", lowStockLevel);
+            inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, name, "Low Stock Level Alert", lowStockLevel);
             System.out.println("Low stock level updated successfully!");
         } catch (IOException e) {
             System.err.println("Failed to update low stock level: " + e.getMessage());
         }
     }
+
 
     // Method to process stock replenishment
     public void processReplenishRequest() {

@@ -81,7 +81,8 @@ public class CSVInventory {
                     }
 
                     if (headerIndex == -1) {
-                        throw new IllegalArgumentException("Header \"" + header + "\" not found in the CSV file.");
+                        System.out.println("Header \"" + header + "\" not found in the CSV file.");
+                        return; // Header not found, return without doing anything
                     }
 
                     headerProcessed = true;
@@ -103,7 +104,8 @@ public class CSVInventory {
         }
 
         if (!rowFound) {
-            throw new IllegalArgumentException("Medicine name \"" + medicineName + "\" not found in the CSV file.");
+            System.out.println("Medicine name \"" + medicineName + "\" not found in the CSV file.");
+            return; // Medicine name not found, return without doing anything
         }
 
         // Write the updated data back to the CSV file
@@ -112,15 +114,47 @@ public class CSVInventory {
                 pw.println(String.join(",", row));
             }
         }
+
+        System.out.println("Successfully updated \"" + header + "\" for medicine \"" + medicineName + "\".");
     }
+
+
 
     public void addInventoryItem(String filePath, String medicineName, String stock, String lowStockLevel)
             throws IOException {
+        boolean exists = false;
+
+        // Check if the medicine already exists in the file
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+
+            // Skip the header row
+            br.readLine();
+
+            // Check each line for the medicine name
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields[0].trim().equalsIgnoreCase(medicineName)) {
+                    exists = true;
+                    break;
+                }
+            }
+        }
+
+        // If the medicine already exists, return without adding it
+        if (exists) {
+            System.out.println("Medicine \"" + medicineName + "\" already exists in the inventory.");
+            return;
+        }
+
+        // If it doesn't exist, add the new inventory item
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
-            bw.write(medicineName + "," + stock + "," + lowStockLevel);
+            bw.write(medicineName + "," + stock + "," + lowStockLevel + "," + "0");
             bw.newLine();
         }
+        System.out.println("Item added successfully!");
     }
+
 
     public void removeInventoryItem(String filePath, String medicineName) throws IOException {
         List<String[]> lines = new ArrayList<>();
@@ -147,7 +181,9 @@ public class CSVInventory {
         }
 
         if (!removed) {
-            throw new IllegalArgumentException("Medicine name \"" + medicineName + "\" not found in the CSV file.");
+            // Print a meaningful message if the item is not found
+            System.out.println("Medicine name \"" + medicineName + "\" not found. No item was removed.");
+            return; // Medicine name not found, return without doing anything
         }
 
         // Write the updated data back to the CSV file
@@ -156,6 +192,8 @@ public class CSVInventory {
                 pw.println(String.join(",", row));
             }
         }
-    }
 
+        // Print a success message after removing the item
+        System.out.println("Medicine \"" + medicineName + "\" has been successfully removed from the inventory.");
+    }
 }

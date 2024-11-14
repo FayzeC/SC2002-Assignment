@@ -5,12 +5,13 @@ import inventorysystem.AdminInventory;
 import java.util.Scanner;
 
 public class AdministratorInvMenu {
-    private int choice = 0;
+
     AdminInventory aInventory = new AdminInventory();
 
 
     public void displayMenu(){
         Scanner sc = new Scanner(System.in);
+        int choice = 0;
         while(choice != 6){
             System.out.println("""
                         \n+======= Inventory Menu =======+
@@ -39,6 +40,7 @@ public class AdministratorInvMenu {
                     aInventory.viewInventory();
                     break;
                 default:
+                    System.out.println("Invalid choice");
                     break;
             }}
 
