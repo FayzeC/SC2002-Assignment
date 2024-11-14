@@ -1,4 +1,4 @@
-package base;
+package roles;
 
 import inventorysystem.AdminInventory;
 
@@ -20,8 +20,9 @@ public class AdministratorInvMenu {
                         3. Update medicine stock
                         4. Update medicine low stock threshold
                         5. View Inventory
-                        6. quit
+                        6. Quit
                         """);
+            System.out.print("Enter your choice: ");
             choice = sc.nextInt();
             switch (choice) {
                 case 1:
