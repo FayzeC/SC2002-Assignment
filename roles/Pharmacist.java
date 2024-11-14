@@ -1,4 +1,4 @@
-package base;
+package roles;
 
 import filemanager.FilePaths;
 import inventorysystem.PharmaInventory;

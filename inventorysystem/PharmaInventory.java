@@ -9,7 +9,7 @@ import java.util.List;
 public class PharmaInventory extends InventoryManagement {
 
     public PharmaInventory() {
-        super(); // Call the parameterized constructor of inventorysystem.InventoryManagement
+        super();
     }
 
     public void submitReplenishRequest() {

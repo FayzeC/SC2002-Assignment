@@ -1,7 +1,8 @@
 package filemanager;
 
+import appointmentsystem.Appointment;
 import base.*;
-import inventorysystem.Inventory;
+import roles.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -68,7 +69,7 @@ public class CSVDataLoader {
                 String pastTreatment = fields[9].trim();
                 boolean firstLogin = "Yes".equalsIgnoreCase(fields[10].trim());
 
-                ConcretePatient patient = new ConcretePatient(patientID, name, password, dob, gender, bloodType, email, doctorAssigned, pastDiagnosis, pastTreatment, firstLogin, "base.Patient");
+                ConcretePatient patient = new ConcretePatient(patientID, name, password, dob, gender, bloodType, email, doctorAssigned, pastDiagnosis, pastTreatment, firstLogin, "roles.Patient");
                 patient.setInformationAccess(patient);
                 patients.add(patient);
             }
@@ -122,40 +123,36 @@ public class CSVDataLoader {
                 String appointmentID = fields[0].trim();
                 String appointmentDate = fields[1].trim();
                 String appointmentTime = fields[2].trim();
-                String patientAssigned = fields[3].trim();
-                String doctorAssigned = fields[4].trim();
-                String status = fields[5].trim();
-                int counter = Integer.parseInt(fields[6].trim());
+                String patientID = fields[3].trim();
+                String patientName = fields[4].trim();
+                String doctorID = fields[5].trim();
+                String doctorName = fields[6].trim();
+                String status = fields[7].trim();
 
-                Appointment appointment = new Appointment(appointmentID, appointmentDate, appointmentTime, patientAssigned, doctorAssigned, status, counter);
+                Appointment appointment = new Appointment(appointmentID, appointmentDate, appointmentTime, patientID, patientName, doctorID, doctorName, status);
                 appointments.add(appointment);
             }
         }
         return appointments;
     }
 
-    public static List<Inventory> loadInventory(String filePath) throws IOException {
-        List<Inventory> inventoryList = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+    public static List<String[]> loadStaffMgrData(String filePath) {
+        List<String[]> staffData = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
-            boolean isFirstRow = true;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                String role = data[3];
 
-            while ((line = br.readLine()) != null) {
-                if (isFirstRow) { // Skip header row
-                    isFirstRow = false;
-                    continue;
+                // Filter for Doctor and Pharmacist roles only
+                if (role.equals("roles.Doctor") || role.equals("roles.Pharmacist")) {
+                    staffData.add(data);
                 }
-
-                String[] fields = line.split(",");
-                String medicineName = fields[0].trim();
-                int initialStock = Integer.parseInt(fields[1].trim());
-                int lowStockAlert = Integer.parseInt(fields[2].trim());
-
-                Inventory inventory = new Inventory(medicineName, initialStock, lowStockAlert);
-                inventoryList.add(inventory);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return inventoryList;
+
+        return staffData;
     }
 }

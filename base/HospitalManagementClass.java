@@ -1,5 +1,7 @@
 package base;
 
+import roles.User;
+
 import java.io.IOException;
 
 /**
@@ -43,7 +45,7 @@ public class HospitalManagementClass {
     public void start() throws IOException {
         System.out.println("Welcome to Hospital Management System (HMS)\nPlease login:");
         while (true) { // Loop to allow multiple logins
-            User user = authService.login(); // Calls login and returns a base.User if successful
+            User user = authService.login(); // Calls login and returns a roles.User if successful
             if (user != null) {
                 RoleAccessController.accessUserFeatures(user); // Display user-specific menu
             }

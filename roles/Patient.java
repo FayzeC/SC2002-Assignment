@@ -1,19 +1,24 @@
-package base;
+package roles;
 
+import appointmentsystem.PatientAppointmentManager;
+import appointmentsystem.PatientAppointmentView;
 import filemanager.FilePaths;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Patient extends User {
     public static final int LOGOUT_OPTION = 10; // Define a constant for logout option
-    private String dob;
-    private String gender;
-    private String bloodType;
-    private String email;
-    private String doctorAssigned;
-    private String pastDiagnosis;
-    private String pastTreatment;
-
+    public String dob;
+    public String gender;
+    public String bloodType;
+    public String email;
+    public String doctorAssigned;
+    public String pastDiagnosis;
+    public String pastTreatment;
+    public PatientAppointmentView appointmentView;
+    public PatientAppointmentManager appointmentManager;
+    public Scanner scanner = new Scanner(System.in);
     // Inject implementations
     private InformationAccess informationAccess;
 
@@ -25,6 +30,8 @@ public class Patient extends User {
         this.doctorAssigned = doctorAssigned;
         this.pastDiagnosis = pastDiagnosis;
         this.pastTreatment = pastTreatment;
+        this.appointmentView = new PatientAppointmentView();
+        this.appointmentManager = new PatientAppointmentManager();
     }
 
     @Override
@@ -54,14 +61,26 @@ public class Patient extends User {
                 informationAccess.updatePersonalInformation(this);
                 break;
             case 3:
+                appointmentView.viewAppointmentSlots();
                 break;
             case 4:
+                System.out.print("Enter Appointment ID to book for consultation: ");
+                String appointmentId = scanner.nextLine();
+                appointmentManager.scheduleAppointment(getHospitalID(), getName(), appointmentId);
                 break;
             case 5:
+                System.out.print("Enter Appointment ID to reschedule for consultation: ");
+                appointmentId = scanner.nextLine();
+                System.out.print("Enter new Appointment ID to reschedule to for consultation: ");
+                String newAppointmentId = scanner.nextLine();
+                appointmentManager.rescheduleAppointment(getHospitalID(), getName(), appointmentId, newAppointmentId);
                 break;
             case 6:
+                System.out.print("Enter Appointment ID to cancel for consultation: ");
+                appointmentId = scanner.nextLine();
+                appointmentManager.cancelAppointment(appointmentId, getHospitalID());
                 break;
-            case 7:
+            case 7: appointmentView.viewAppointmentStatus(getHospitalID());
                 break;
             case 8:
                 break;
@@ -79,9 +98,10 @@ public class Patient extends User {
         System.out.println("Role: " + getRole());
     }
 
-    public String toString() { return "Patient " + getName(); }
-
     // Getters
+    public String toString() {
+        return "Patient " + getName();
+    }
     public int getLogoutOption() { return LOGOUT_OPTION; }
 
     public String getDoB() { return dob; }

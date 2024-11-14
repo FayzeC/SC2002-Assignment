@@ -1,10 +1,13 @@
-package base;
+package roles;
 
+import filemanager.CSVDataLoader;
 import filemanager.CSVUpdater;
 import filemanager.FilePaths;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class ConcretePatient extends Patient implements InformationAccess {
 
@@ -14,17 +17,37 @@ public class ConcretePatient extends Patient implements InformationAccess {
 
     @Override
     public void viewMedicalRecords(User user) {
-        // id, name, dob, gender, email, blood type, past diagnosis, treatments
-        System.out.println("\nMedical Records for " + user.getName() + "\n");
-        System.out.println("-------------------------------------\n" +
-                "base.Patient ID: " + user.getHospitalID() + "\n" +
-                "Date of Birth: " + getDoB() + "\n" +
-                "Gender: " + getGender() + "\n" +
-                "Email: " + getEmail() + "\n" +
-                "Blood Type: " + getBloodType() + "\n" +
-                "Past Diagnosis: " + getPastDiagnosis() + "\n" +
-                "Past Treatment: " + getPastTreatment()
-        );
+        try {
+            // Load all patient records from the CSV
+            List<Patient> allPatients = CSVDataLoader.loadPatients(FilePaths.PATIENT_LIST_PATH);
+
+            // Filter records for the current patient's ID
+            List<Patient> patientRecords = allPatients.stream()
+                    .filter(record -> record.getHospitalID().equals(this.getHospitalID()))
+                    .collect(Collectors.toList());
+
+            if (patientRecords.isEmpty()) {
+                System.out.println("No records found for Patient ID: " + this.getHospitalID());
+                return;
+            }
+
+            System.out.println("\n+======= Medical Records =======+");
+            System.out.println("Patient ID: " + getHospitalID() + ", Patient Name: " + getName() + "\n" +
+                    "Date of Birth: " + getDoB() + ", Gender: " + getGender() + "\n" +
+                    "Contact: " + getEmail() + ", Blood Type: " + getBloodType() + "\n" +
+                    "---------- Medical History ----------");
+
+            // Display each record, with doctor-specific details
+            for (Patient record : patientRecords) {
+                System.out.println("Doctor ID: " + record.getDoctorAssigned() + "\n" +
+                        "Past Diagnosis: " + record.getPastDiagnosis() + "\n" +
+                        "Past Treatment: " + record.getPastTreatment() + "\n" +
+                        "------------------------------------");
+            }
+
+        } catch (IOException e) {
+            System.err.println("Error loading medical records: " + e.getMessage());
+        }
     }
 
     @Override
@@ -52,7 +75,7 @@ public class ConcretePatient extends Patient implements InformationAccess {
                     System.out.print("\nEnter New Name: ");
                     String name = sc.nextLine();
                     user.setName(name);
-                    CSVUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), "Name", name);
+                    CSVUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), null , "Name", name, 0, 0);
                     System.out.println("Name updated successfully.");
                     break;
                 case 2:
@@ -73,7 +96,7 @@ public class ConcretePatient extends Patient implements InformationAccess {
                             validDate = true;
                             String dob = String.format("%02d-%02d-%04d", day, month, year);
                             setDob(dob);
-                            CSVUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), "Date of Birth", dob);
+                            CSVUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), null , "Date of Birth", dob, 0, 0);
                             System.out.println("Date of birth updated successfully.");
                         } else {
                             System.out.println("Invalid date. Please enter a valid date.");
@@ -88,7 +111,7 @@ public class ConcretePatient extends Patient implements InformationAccess {
                         if(email.contains("@")){
                             validEmail = true;
                             setEmail(email);
-                            CSVUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), "Contact Information", email);
+                            CSVUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), null, "Contact Information", email, 0, 0);
                             System.out.println("Email updated successfully.");
                         }else{
                             System.out.println("Invalid email. Please enter a valid email address. Be sure to include '@'");
@@ -103,7 +126,7 @@ public class ConcretePatient extends Patient implements InformationAccess {
                         if(bloodType.matches("A\\+|A-|B\\+|B-|AB\\+|AB-|O\\+|O-")){
                             validBloodType = true;
                             setBloodType(bloodType);
-                            CSVUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), "Blood Type", bloodType);
+                            CSVUpdater.updater(FilePaths.PATIENT_LIST_PATH, getHospitalID(), null , "Blood Type", bloodType, 0, 0);
                             System.out.println("Blood type updated successfully.");
                         }else{
                             System.out.println("Invalid blood type. Please enter a valid blood type.");
