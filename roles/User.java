@@ -1,7 +1,7 @@
 package roles;
 
 import filemanager.CSVUpdater;
-import org.mindrot.jbcrypt.BCrypt; // uncomment this during submission
+// import org.mindrot.jbcrypt.BCrypt; // uncomment this during submission
 
 import java.io.IOException;
 import java.util.Scanner;
