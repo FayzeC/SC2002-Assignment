@@ -20,6 +20,7 @@ public class DoctorAORAdd implements addOutcomeRecord {
     private String appointmentDate;
     private StringBuilder medication = new StringBuilder();
     private StringBuilder quantity = new StringBuilder();
+    private String service;
     private String consultationNotes;
     private String apptStatus;
 
@@ -76,6 +77,8 @@ public class DoctorAORAdd implements addOutcomeRecord {
         Set<String> selectedMedicines = new HashSet<>();
         String input = "";
 
+        System.out.print("Enter Type of Service: ");
+        service = scanner.nextLine().trim();
         // Allow the user to select multiple medications
         while (true) {
             // Display available medicines with a "Done" option
@@ -179,7 +182,7 @@ public class DoctorAORAdd implements addOutcomeRecord {
                     patientID,
                     doctorID,
                     appointmentDate,
-                    "test",
+                    service,
                     medication.toString(),
                     quantity.toString(),
                     "pending",              // initial status
