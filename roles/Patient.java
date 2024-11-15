@@ -7,7 +7,16 @@ import filemanager.FilePaths;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Represents a Patient user in the system with various medical and appointment functionalities.
+ * Inherits from the {@link User} class.
+ * Provides the patient with capabilities like viewing and updating personal information,
+ * managing appointments, and more.
+ */
 public class Patient extends User {
+    /**
+     * Logout option constant for the Patient menu.
+     */
     public static final int LOGOUT_OPTION = 10; // Define a constant for logout option
     public String dob;
     public String gender;
@@ -22,6 +31,22 @@ public class Patient extends User {
     // Inject implementations
     private InformationAccess informationAccess;
 
+    /**
+     * Constructor to initialize a Patient with essential details and dependencies.
+     *
+     * @param hospitalID Hospital ID of the patient
+     * @param name Name of the patient
+     * @param password Password of the patient
+     * @param dob Date of birth of the patient
+     * @param gender Gender of the patient
+     * @param bloodType Blood type of the patient
+     * @param email Email of the patient
+     * @param doctorAssigned Doctor assigned to the patient
+     * @param pastDiagnosis Past diagnosis history of the patient
+     * @param pastTreatment Past treatment history of the patient
+     * @param firstLogin Indicates if it is the first login of the patient
+     * @param role Role of the user (should be 'Patient')
+     */
     public Patient(String hospitalID, String name, String password, String dob, String gender, String bloodType, String email, String doctorAssigned, String pastDiagnosis, String pastTreatment, boolean firstLogin, String role) {
         super(hospitalID, name, password, role, gender, firstLogin);
         this.dob = dob;
@@ -34,6 +59,9 @@ public class Patient extends User {
         this.appointmentManager = new PatientAppointmentManager();
     }
 
+    /**
+     * Displays the menu of options available for the Patient to choose from.
+     */
     @Override
     public void displayMenu() {
         System.out.println("""
@@ -51,6 +79,12 @@ public class Patient extends User {
                 """);
     }
 
+    /**
+     * Handles the user's option selection and executes the corresponding functionality.
+     *
+     * @param option The option selected by the Patient
+     * @throws IOException If there is an error during any of the operations
+     */
     @Override
     public void handleOption(int option) throws IOException {
         switch (option) {
@@ -92,36 +126,112 @@ public class Patient extends User {
         }
     }
 
-    public void print(){ // Remove after final submission this is just to check if data is loaded correctly
-        System.out.println("Name: " + getName());
-        System.out.println("Password: " + getPassword());
-        System.out.println("Role: " + getRole());
-    }
+    /**
+     * Returns a string representation of the Patient object.
+     *
+     * @return A string containing the Patient's name
+     */
+    public String toString() { return "Patient " + getName(); }
 
     // Getters
-    public String toString() {
-        return "Patient " + getName();
-    }
+    /**
+     * Gets the constant logout option for the Patient.
+     *
+     * @return The logout option constant (10)
+     */
     public int getLogoutOption() { return LOGOUT_OPTION; }
 
-    public String getDoB() { return dob; }
+    /**
+     * Gets the date of birth of the patient.
+     *
+     * @return The patient's date of birth
+     */
+    public String getDoB() {
+        return dob;
+    }
 
-    public String getEmail() { return email; }
+    /**
+     * Gets the email address of the patient.
+     *
+     * @return The patient's email address
+     */
+    public String getEmail() {
+        return email;
+    }
 
-    public String getBloodType() { return bloodType; }
+    /**
+     * Gets the blood type of the patient.
+     *
+     * @return The patient's blood type
+     */
+    public String getBloodType() {
+        return bloodType;
+    }
 
-    public String getDoctorAssigned() { return doctorAssigned; }
+    /**
+     * Gets the doctor assigned to the patient.
+     *
+     * @return The assigned doctor's name
+     */
+    public String getDoctorAssigned() {
+        return doctorAssigned;
+    }
 
-    public String getPastDiagnosis() { return pastDiagnosis; }
+    /**
+     * Gets the past diagnosis history of the patient.
+     *
+     * @return The patient's past diagnosis information
+     */
+    public String getPastDiagnosis() {
+        return pastDiagnosis;
+    }
 
-    public String getPastTreatment() { return pastTreatment; }
+    /**
+     * Gets the past treatment history of the patient.
+     *
+     * @return The patient's past treatment information
+     */
+    public String getPastTreatment() {
+        return pastTreatment;
+    }
 
     // Setters
-    public void setInformationAccess(InformationAccess informationAccess) { this.informationAccess = informationAccess; }
 
-    public void setDob(String dob) { this.dob = dob; }
+    /**
+     * Sets the {@link InformationAccess} implementation for the patient.
+     * This allows for the management of the patient's medical records and personal information.
+     *
+     * @param informationAccess The {@link InformationAccess} instance to be set
+     */
+    public void setInformationAccess(InformationAccess informationAccess) {
+        this.informationAccess = informationAccess;
+    }
 
-    public void setBloodType(String bloodType) { this.bloodType = bloodType; }
+    /**
+     * Sets the date of birth of the patient.
+     *
+     * @param dob The patient's date of birth to be set
+     */
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
 
-    public void setEmail(String email) { this.email = email; }
+    /**
+     * Sets the blood type of the patient.
+     *
+     * @param bloodType The patient's blood type to be set
+     */
+    public void setBloodType(String bloodType) {
+        this.bloodType = bloodType;
+    }
+
+    /**
+     * Sets the email address of the patient.
+     *
+     * @param email The patient's email address to be set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 }

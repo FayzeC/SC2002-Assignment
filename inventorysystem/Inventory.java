@@ -23,10 +23,10 @@ public class Inventory {
         return lowStockAlert;
     }
 
-    public void print() { // Remove after final submission this is just to check if data is loaded
-        // correctly
-        System.out.println("Medicine Name: " + medicineName);
-        System.out.println("Initial Stock: " + initialStock);
-        System.out.println("Low Stock Alert: " + lowStockAlert);
+    public void print() {
+        System.out.printf("%-15s %-15s %-15s\n", medicineName, initialStock, lowStockAlert);
+//        System.out.println("Medicine Name: " + medicineName);
+//        System.out.println("Initial Stock: " + initialStock);
+//        System.out.println("Low Stock Alert: " + lowStockAlert);
     }
 }

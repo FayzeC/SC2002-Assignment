@@ -4,7 +4,26 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The CSVUpdater class provides functionality to update specific values in a CSV file.
+ * The updater method updates a cell in a CSV file based on matching values in specific columns
+ * (e.g., IDs), and writes the updated content back to the file.
+ */
 public class CSVUpdater {
+
+    /**
+     * Updates a specific value in the CSV file based on matching ID values and a specified header.
+     *
+     * @param filePath the path to the CSV file to be updated
+     * @param id1 the value to match in the first ID column (idColumnIndex1)
+     * @param id2 the value to match in the second ID column (idColumnIndex2). Can be null to only match id1.
+     * @param header the column header where the value needs to be updated
+     * @param newValue the new value to set in the specified header column
+     * @param idColumnIndex1 the index of the first ID column in the CSV
+     * @param idColumnIndex2 the index of the second ID column in the CSV
+     * @throws IOException if an error occurs while reading or writing the file
+     * @throws IllegalArgumentException if the header is not found or the specified record is not found
+     */
     public static void updater(String filePath, String id1, String id2, String header, String newValue, int idColumnIndex1, int idColumnIndex2) throws IOException {
         List<String[]> lines = new ArrayList<>();
         int headerColumnIndex = -1;

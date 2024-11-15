@@ -4,11 +4,17 @@ import inventorysystem.AdminInventory;
 
 import java.util.Scanner;
 
+/**
+ * Represents the menu for managing the hospital inventory by the Administrator.
+ * Provides options to add, remove, update, and view medication inventory.
+ */
 public class AdministratorInvMenu {
 
     AdminInventory aInventory = new AdminInventory();
 
-
+    /**
+     * Displays the inventory management menu and handles user choices.
+     */
     public void displayMenu(){
         Scanner sc = new Scanner(System.in);
         int choice = 0;
@@ -44,6 +50,5 @@ public class AdministratorInvMenu {
                     System.out.println("Invalid choice");
                     break;
             }}
-
     }
 }

@@ -9,12 +9,39 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a concrete implementation of a Patient with the ability to view and update their medical records.
+ * Implements the {@link InformationAccess} interface to provide methods for accessing and updating personal information.
+ * Inherits from the {@link Patient} class.
+ */
 public class ConcretePatient extends Patient implements InformationAccess {
 
+    /**
+     * Constructs a ConcretePatient object with the specified details.
+     *
+     * @param hospitalID    the hospital ID of the patient
+     * @param name          the name of the patient
+     * @param password      the password of the patient
+     * @param dob           the date of birth of the patient
+     * @param gender        the gender of the patient
+     * @param bloodType     the blood type of the patient
+     * @param email         the email of the patient
+     * @param doctorAssigned the doctor assigned to the patient
+     * @param pastDiagnosis the past diagnoses of the patient
+     * @param pastTreatment the past treatments of the patient
+     * @param firstLogin    whether it's the patient's first login
+     * @param role          the role of the patient
+     */
     public ConcretePatient(String hospitalID, String name, String password, String dob, String gender, String bloodType, String email, String doctorAssigned, String pastDiagnosis, String pastTreatment, boolean firstLogin, String role) {
         super(hospitalID, name, password, dob, gender, bloodType, email, doctorAssigned, pastDiagnosis, pastTreatment, firstLogin, role);
     }
 
+    /**
+     * Allows the patient to view their medical records.
+     * Loads and filters records based on the patient's hospital ID and displays the medical history.
+     *
+     * @param user the current logged-in user
+     */
     @Override
     public void viewMedicalRecords(User user) {
         try {
@@ -50,6 +77,13 @@ public class ConcretePatient extends Patient implements InformationAccess {
         }
     }
 
+    /**
+     * Allows the patient to update their personal information such as name, date of birth, email, and blood type.
+     * Updates the CSV file with the new information.
+     *
+     * @param user the current logged-in user
+     * @throws IOException if there is an error during file handling
+     */
     @Override
     public void updatePersonalInformation(User user) throws IOException {
 //        ExcelUpdater excelUpdater = new ExcelUpdater();
@@ -143,9 +177,20 @@ public class ConcretePatient extends Patient implements InformationAccess {
         }while(exec);
     }
 
+    /**
+     * Validates the date of birth entered by the patient.
+     * Ensures that the date is realistic (e.g., year between 1900 and current year, valid month and day).
+     *
+     * @param day the day of the month
+     * @param month the month of the year
+     * @param year the year
+     * @return true if the date is valid, false otherwise
+     */
     private boolean isValidDate(int day, int month, int year) {
-        if (year < 1900 || year > 2100) {
-            System.out.println("Year should be between 1900 and 2100.");
+        int currentYear = java.time.Year.now().getValue(); // Get the current year
+
+        if (year < 1900 || year > currentYear) {
+            System.out.println("Year should be between 1900 and the current year (" + currentYear + ").");
             return false;
         }
 
@@ -176,4 +221,5 @@ public class ConcretePatient extends Patient implements InformationAccess {
 
         return true;
     }
+
 }

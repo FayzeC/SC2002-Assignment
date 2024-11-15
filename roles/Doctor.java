@@ -9,23 +9,48 @@ import filemanager.FilePaths;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Represents a Doctor user in the system with various medical and scheduling functionalities.
+ * Inherits from the {@link User} class.
+ * Provides the doctor with capabilities like viewing and updating medical records,
+ * managing appointments, setting availability, and more.
+ */
 public class Doctor extends User {
-    public static final int LOGOUT_OPTION = 9; // Define a constant for logout option
+    /**
+     * Logout option constant for the Doctor menu.
+     */
+    public static final int LOGOUT_OPTION = 9;
+
     private String age;
     private DoctorAvailability availabilityManager;
     private DoctorAppointmentManager appointmentManager;
     private DoctorScheduleView schedule;
     private DoctorInformationAccess informationAccess;
 
+    /**
+     * Constructor to initialize a Doctor with essential details and dependencies.
+     *
+     * @param hospitalID Hospital ID of the doctor
+     * @param name Name of the doctor
+     * @param password Password of the doctor
+     * @param role Role of the user (should be 'Doctor')
+     * @param gender Gender of the doctor
+     * @param age Age of the doctor
+     * @param firstLogin Indicates if it is the first login of the doctor
+     * @throws IOException If there is an error during initialization
+     */
     public Doctor(String hospitalID, String name, String password, String role, String gender, String age, boolean firstLogin) throws IOException {
         super(hospitalID, name, password, role, gender, firstLogin);
         this.age = age;
         this.availabilityManager = new DoctorAvailability();
         this.appointmentManager = new DoctorAppointmentManager();
         this.schedule = new DoctorScheduleView();
-        this.informationAccess = new DoctorInformationAccess(); // Dependency injection
+        this.informationAccess = new DoctorInformationAccess();
     }
 
+    /**
+     * Displays the menu of options available for the Doctor to choose from.
+     */
     @Override
     public void displayMenu() {
         System.out.println("""
@@ -42,15 +67,21 @@ public class Doctor extends User {
                 """);
     }
 
+    /**
+     * Handles the user's option selection and executes the corresponding functionality.
+     *
+     * @param option The option selected by the Doctor
+     * @throws IOException If there is an error during any of the operations
+     */
     @Override
     public void handleOption(int option) throws IOException {
         Scanner scanner = new Scanner(System.in);
         switch (option) {
             case 1:
-                informationAccess.viewMedicalRecords(this); // Case 1
+                informationAccess.viewMedicalRecords(this);
                 break;
             case 2:
-                informationAccess.updatePersonalInformation(this); // Case 2
+                informationAccess.updatePersonalInformation(this);
                 break;
             case 3:
                 schedule.viewPersonalSchedule(getHospitalID());
@@ -75,8 +106,7 @@ public class Doctor extends User {
                 schedule.viewUpcomingAppointments(getHospitalID());
                 break;
             case 7:
-                // Implement Record Appointment Outcome functionality if needed
-                break;
+                break; // Appointment outcome functionality not implemented yet
             case 8:
                 changePassword(FilePaths.STAFF_LIST_PATH);
                 break;
@@ -88,11 +118,21 @@ public class Doctor extends User {
         }
     }
 
-    // Getters
-    public int getLogoutOption() { return LOGOUT_OPTION; }
+    /**
+     * Gets the constant logout option for the Doctor.
+     *
+     * @return The logout option constant (9)
+     */
+    public int getLogoutOption() {
+        return LOGOUT_OPTION;
+    }
 
+    /**
+     * Returns a string representation of the Doctor object.
+     *
+     * @return A string containing the Doctor's name
+     */
     public String toString() {
         return "Doctor " + getName();
     }
-
 }

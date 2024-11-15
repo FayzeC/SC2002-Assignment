@@ -1,4 +1,5 @@
 package base;
+
 import appointmentsystem.Appointment;
 import filemanager.CSVDataLoader;
 import filemanager.FilePaths;
@@ -9,6 +10,11 @@ import java.util.Scanner;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * The AuthService class handles user authentication and data loading.
+ * It provides methods to load user data from CSV files and manage login attempts.
+ * Users are authenticated based on their hospital ID and password.
+ */
 public class AuthService {
     private List<Patient> patientList;
     private List<Doctor> doctorList = new ArrayList<>();
@@ -17,11 +23,19 @@ public class AuthService {
     private List<AppointmentOutcomeRecord> apptOutcomeRecordList = new ArrayList<>();
     private List<Appointment> appointmentList = new ArrayList<>();
 
+    /**
+     * Constructs an AuthService instance and loads the initial data from CSV files.
+     */
     public AuthService() {
         loadData(); // Load data initially
     }
 
-    // Method to load data from Excel
+    /**
+     * Loads user data and appointment records from CSV files.
+     * Clears the existing lists before loading new data.
+     *
+     * @throws IOException if an error occurs during data loading
+     */
     private void loadData() {
         try {
             // Clear the existing lists
@@ -32,6 +46,7 @@ public class AuthService {
             if(apptOutcomeRecordList != null ) { apptOutcomeRecordList.clear(); }
             if(appointmentList != null ) { appointmentList.clear(); }
 
+            // Load data from CSV files
             patientList = CSVDataLoader.loadPatients(FilePaths.PATIENT_LIST_PATH);
             CSVDataLoader.loadStaff(FilePaths.STAFF_LIST_PATH, pharmacistList, doctorList, administratorList);
             apptOutcomeRecordList = CSVDataLoader.loadApptOutcomeRecord(FilePaths.APPOINTMENT_OUTCOME_RECORD_PATH);
@@ -41,6 +56,13 @@ public class AuthService {
         }
     }
 
+    /**
+     * Handles the login process for users. Prompts the user for a hospital ID and password,
+     * authenticates the user, and returns the corresponding user object if the login is successful.
+     *
+     * @return the authenticated User object, or null if authentication fails
+     * @throws IOException if an error occurs during data loading
+     */
     public User login() throws IOException {
         // Reload data every time a login attempt is made
         loadData();
@@ -72,30 +94,40 @@ public class AuthService {
             String choice;
             System.out.println("Login successful. Welcome " + user + "!");
 
-            if (user.getFirstLogin()) { // If this is the first login
+            // Check if it is the user's first login
+            if (user.getFirstLogin()) {
                 String filename = "";
                 System.out.println("This is your first login. We recommend you change your password for security purposes.");
+
+                // Determine the appropriate filename based on user role
                 if(user.getRole().equals("Patient")) {
                     filename = FilePaths.PATIENT_LIST_PATH;
-                }else{
+                } else {
                     filename = FilePaths.STAFF_LIST_PATH;
                 }
 
+                // Prompt the user to change their password
                 user.changePassword(filename);
                 user.setFirstLogin(filename);
             }
-            return user;
+            return user; // Return the authenticated user
         } else {
             System.out.println("Invalid credentials.\n");
-            return null;
+            return null; // Return null if authentication fails
         }
     }
 
-    // Helper method to get user by ID from a specific list of Users
+    /**
+     * Helper method to search for a user by their hospital ID in a specific list.
+     *
+     * @param id the hospital ID to search for
+     * @param userList the list of users to search through
+     * @return the User object if found, or null if not found
+     */
     private User getUserById(String id, List<? extends User> userList) {
         for (User user : userList) {
             if (user.getHospitalID().equals(id)) {
-                return user;
+                return user; // Return the user if a match is found
             }
         }
         return null; // Return null if no user is found

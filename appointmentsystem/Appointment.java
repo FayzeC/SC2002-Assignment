@@ -37,19 +37,4 @@ public class Appointment {
         this.doctorName = doctorName;
         this.status = status;
     }
-
-    /**
-     * Prints the details of the appointment to the console.
-     * This method is intended for debugging purposes and should be removed in the final submission.
-     */
-    public void print() {
-        System.out.println("Appointment ID: " + appointmentID);
-        System.out.println("Appointment Date: " + appointmentDate);
-        System.out.println("Appointment Time: " + appointmentTime);
-        System.out.println("Patient ID: " + patientID);
-        System.out.println("Patient Name: " + patientName);
-        System.out.println("Doctor ID: " + doctorID);
-        System.out.println("Doctor Name: " + doctorName);
-        System.out.println("Status: " + status);
-    }
 }

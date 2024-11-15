@@ -26,6 +26,8 @@ public class InventoryManagement {
         }
 
         // Display the inventory items
+        System.out.println("\n+======= Inventory List =======+");
+        System.out.printf("%-15s %-15s %-15s\n", "Medicine Name", "Initial Stock", "Low Stock Alert");
         for (Inventory item : inventoryList) {
             item.print(); // Assuming Inventory has a print method for viewing details
         }
