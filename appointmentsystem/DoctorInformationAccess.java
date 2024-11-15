@@ -13,8 +13,19 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
+/**
+ * The DoctorInformationAccess class provides doctors with access to view and update
+ * the medical records of patients assigned to them. This class implements the {@link InformationAccess} interface
+ * to enforce access control and allow only doctors to view and modify records.
+ */
 public class DoctorInformationAccess implements InformationAccess {
 
+    /**
+     * Displays the medical records of patients assigned to the specified doctor.
+     * Only accessible by users with the role of Doctor.
+     *
+     * @param user The user requesting access to patient records.
+     */
     @Override
     public void viewMedicalRecords(User user) {
         if (!(user instanceof Doctor)) {
@@ -69,6 +80,14 @@ public class DoctorInformationAccess implements InformationAccess {
         }
     }
 
+    /**
+     * Allows the doctor to update the medical records of a patient assigned to them.
+     * The doctor can input new diagnosis and treatment information, which is then appended
+     * to the patient's record in the CSV file.
+     *
+     * @param user The user attempting to update patient information.
+     * @throws IOException if an I/O error occurs while accessing the CSV file.
+     */
     @Override
     public void updatePersonalInformation(User user) throws IOException {
         if (!(user instanceof Doctor)) {
@@ -122,6 +141,17 @@ public class DoctorInformationAccess implements InformationAccess {
         System.out.println("Medical records for Patient ID " + patientId + " have been updated successfully.");
     }
 
+    /**
+     * Adds a new patient record or updates an existing record for a patient with new diagnosis and
+     * treatment information. If the existing diagnosis or treatment is marked as "NA," the record is updated
+     * directly; otherwise, a new entry is appended to the CSV file.
+     *
+     * @param patientId The ID of the patient whose records are being updated.
+     * @param doctorId The ID of the doctor updating the records.
+     * @param newDiagnosis The new diagnosis for the patient.
+     * @param newTreatment The new treatment for the patient.
+     * @throws IOException if an I/O error occurs while writing to the CSV file.
+     */
     private void addOrUpdatePatientRecord(String patientId, String doctorId, String newDiagnosis, String newTreatment) throws IOException {
         List<Patient> patients = CSVDataLoader.loadPatients(FilePaths.PATIENT_LIST_PATH);
         boolean recordUpdated = false;

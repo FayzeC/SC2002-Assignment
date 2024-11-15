@@ -7,8 +7,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * The PatientAppointmentView class provides functionalities for patients to view available appointment slots
+ * and check the status of their scheduled appointments. It interacts with the CSV file to retrieve appointment data.
+ * This class implements the {@link patientViewAppointment} interface.
+ */
 public class PatientAppointmentView implements patientViewAppointment {
 
+    /**
+     * Displays a list of all available appointment slots that are unreserved.
+     * Each slot shows details such as the appointment ID, date, time slot, doctor name, and current status.
+     */
     public void viewAppointmentSlots() {
         File file = new File(FilePaths.APPOINTMENT_LIST_PATH);
         if (!file.exists()) {
@@ -44,6 +53,12 @@ public class PatientAppointmentView implements patientViewAppointment {
         }
     }
 
+    /**
+     * Displays the scheduled appointments for a specific patient.
+     * Each appointment displays details such as appointment ID, date, time slot, doctor ID, doctor name, and status.
+     *
+     * @param patientId The ID of the patient whose appointments are to be viewed.
+     */
     public void viewAppointmentStatus(String patientId) {
         File file = new File(FilePaths.APPOINTMENT_LIST_PATH);
         if (!file.exists()) {

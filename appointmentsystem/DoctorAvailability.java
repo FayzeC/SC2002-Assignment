@@ -11,11 +11,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The DoctorAvailability class allows doctors to set their availability on a given date.
+ * It enables specifying start and end times within a valid range and generates 30-minute time slots,
+ * which are then saved to a CSV file for tracking availability.
+ */
 public class DoctorAvailability {
     private Scanner scanner = new Scanner(System.in);
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    /**
+     * Prompts the doctor to set availability by specifying a date, start time, and end time.
+     * Validates the date and time inputs, generates 30-minute time slots within the specified
+     * range, and writes them to the CSV file.
+     *
+     * @param doctor The doctor object for whom availability is being set.
+     */
     // Method to set availability for a doctor
     public void setAvailability(Doctor doctor) {
         String date;
@@ -71,6 +83,12 @@ public class DoctorAvailability {
         }
     }
 
+    /**
+     * Validates if a given date string matches the expected format (YYYY-MM-DD).
+     *
+     * @param date The date string to validate.
+     * @return true if the date is valid, false otherwise.
+     */
     // Helper method to validate date format
     private boolean isValidDate(String date) {
         try {
@@ -81,12 +99,24 @@ public class DoctorAvailability {
         }
     }
 
+    /**
+     * Checks if a given date is in the future compared to the current date.
+     *
+     * @param date The date to check.
+     * @return true if the date is in the future, false otherwise.
+     */
     // Helper method to check if the date is in the future
     private boolean isFutureDate(String date) {
         LocalDate inputDate = LocalDate.parse(date, DATE_FORMATTER);
         return inputDate.isAfter(LocalDate.now());
     }
 
+    /**
+     * Parses a time string in the format HH:mm and returns a LocalTime object.
+     *
+     * @param time The time string to parse.
+     * @return A LocalTime object if parsing is successful, null otherwise.
+     */
     // Helper method to parse time in HH:mm format
     private LocalTime parseTime(String time) {
         try {
@@ -97,6 +127,12 @@ public class DoctorAvailability {
         }
     }
 
+    /**
+     * Checks if a specified time falls within the valid range of 10:00 to 21:00.
+     *
+     * @param time The time to check.
+     * @return true if the time is within the range, false otherwise.
+     */
     // Helper method to check if time falls within the 10:00 to 21:00 range
     private boolean isValidTimeRange(LocalTime time) {
         LocalTime minTime = LocalTime.of(10, 0);
@@ -104,6 +140,14 @@ public class DoctorAvailability {
         return !time.isBefore(minTime) && !time.isAfter(maxTime);
     }
 
+    /**
+     * Generates a list of 30-minute time slots between a specified start and end time.
+     * Rounds up the start time to the nearest half-hour if necessary.
+     *
+     * @param startTime The start time of availability.
+     * @param endTime The end time of availability.
+     * @return A list of 30-minute time slots as strings.
+     */
     private List<String> generateTimeSlots(LocalTime startTime, LocalTime endTime) {
         List<String> timeSlots = new ArrayList<>();
 
@@ -124,6 +168,16 @@ public class DoctorAvailability {
         return timeSlots;
     }
 
+    /**
+     * Writes the specified date and time slots for the doctor to the appointment CSV file.
+     * Ensures no duplicate slots are added.
+     *
+     * @param doctorId The ID of the doctor.
+     * @param doctorName The name of the doctor.
+     * @param date The date of availability.
+     * @param timeSlots The list of 30-minute time slots to write.
+     * @throws IOException if an I/O error occurs during file writing.
+     */
     private void writeToCSV(String doctorId, String doctorName, String date, List<String> timeSlots) throws IOException {
         File file = new File(FilePaths.APPOINTMENT_LIST_PATH);
 

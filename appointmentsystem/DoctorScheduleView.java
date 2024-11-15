@@ -7,8 +7,19 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * The DoctorScheduleView class provides functionalities for doctors to view their schedules,
+ * including both all appointments and upcoming confirmed appointments.
+ * It implements the {@link doctorViewAppointment} interface.
+ */
 public class DoctorScheduleView implements doctorViewAppointment {
 
+    /**
+     * Displays the full schedule of all appointments assigned to the specified doctor.
+     * Each appointment displays details such as date, time slot, patient ID, patient name, and status.
+     *
+     * @param doctorId The ID of the doctor whose schedule is to be viewed.
+     */
     public void viewPersonalSchedule(String doctorId) {
         File file = new File(FilePaths.APPOINTMENT_LIST_PATH);
         if (!file.exists()) {
@@ -46,6 +57,12 @@ public class DoctorScheduleView implements doctorViewAppointment {
         }
     }
 
+    /**
+     * Displays only the upcoming confirmed appointments for the specified doctor.
+     * This view excludes unconfirmed or pending appointments.
+     *
+     * @param doctorId The ID of the doctor whose upcoming appointments are to be viewed.
+     */
     public void viewUpcomingAppointments(String doctorId) {
         File file = new File(FilePaths.APPOINTMENT_LIST_PATH);
         if (!file.exists()) {

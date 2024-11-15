@@ -6,9 +6,21 @@ import filemanager.FilePaths;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
+/**
+ * The PatientAppointmentManager class implements the {@link patientAppointmentManagement} interface
+ * to handle scheduling, canceling, and rescheduling appointments for patients. It interacts with
+ * CSV files to manage appointment data.
+ */
 public class PatientAppointmentManager implements patientAppointmentManagement {
 
+    /**
+     * Schedules an appointment for a patient if the slot is available and the patient has no other
+     * appointments on the same day. Marks the appointment as pending confirmation.
+     *
+     * @param patientId The ID of the patient booking the appointment.
+     * @param patientName The name of the patient.
+     * @param appointmentId The ID of the appointment to be scheduled.
+     */
     @Override
     public void scheduleAppointment(String patientId, String patientName, String appointmentId) {
         boolean appointmentExists = false;
@@ -61,6 +73,13 @@ public class PatientAppointmentManager implements patientAppointmentManagement {
         }
     }
 
+    /**
+     * Cancels an existing appointment for a patient, releasing the slot if the appointment is pending
+     * or confirmed. Removes doctor association if no other appointments exist with the same doctor.
+     *
+     * @param appointmentId The ID of the appointment to be canceled.
+     * @param patientId The ID of the patient who booked the appointment.
+     */
     @Override
     public void cancelAppointment(String appointmentId, String patientId) {
         boolean appointmentExists = false;
@@ -115,6 +134,16 @@ public class PatientAppointmentManager implements patientAppointmentManagement {
         }
     }
 
+    /**
+     * Reschedules an appointment to a new slot if available, ensuring the new date does not conflict
+     * with other appointments. The original appointment is canceled and a new appointment is booked.
+     *
+     * @param patientId The ID of the patient rescheduling the appointment.
+     * @param patientName The name of the patient.
+     * @param appointmentId The current appointment ID.
+     * @param newAppointmentId The new appointment ID for rescheduling.
+     * @throws IOException if an I/O error occurs during the rescheduling process.
+     */
     @Override
     public void rescheduleAppointment(String patientId, String patientName, String appointmentId, String newAppointmentId) throws IOException {
         if (!isAppointmentOwnedByPatient(appointmentId, patientId)) {
@@ -153,6 +182,14 @@ public class PatientAppointmentManager implements patientAppointmentManagement {
         }
     }
 
+    /**
+     * Checks if a specified appointment is owned by a specific patient.
+     *
+     * @param appointmentId The ID of the appointment.
+     * @param patientId The ID of the patient.
+     * @return true if the appointment is booked by the patient, false otherwise.
+     * @throws IOException if an I/O error occurs.
+     */
     private boolean isAppointmentOwnedByPatient(String appointmentId, String patientId) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(FilePaths.APPOINTMENT_LIST_PATH))) {
             String line;
@@ -175,6 +212,14 @@ public class PatientAppointmentManager implements patientAppointmentManagement {
         return false;
     }
 
+    /**
+     * Checks if a patient has other appointments with the specified doctor.
+     *
+     * @param patientId The ID of the patient.
+     * @param doctorId The ID of the doctor.
+     * @return true if other appointments with the doctor exist, false otherwise.
+     * @throws IOException if an I/O error occurs.
+     */
     private boolean hasOtherAppointmentsWithDoctor(String patientId, String doctorId) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(FilePaths.APPOINTMENT_LIST_PATH))) {
             String line;
@@ -198,6 +243,13 @@ public class PatientAppointmentManager implements patientAppointmentManagement {
         return false;
     }
 
+    /**
+     * Checks if an appointment with the given ID is scheduled (not marked as "UNRESERVED").
+     *
+     * @param appointmentId The ID of the appointment.
+     * @return true if the appointment is scheduled, false otherwise.
+     * @throws IOException if an I/O error occurs.
+     */
     public boolean isAppointmentScheduled(String appointmentId) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(FilePaths.APPOINTMENT_LIST_PATH))) {
             String line;
@@ -221,6 +273,12 @@ public class PatientAppointmentManager implements patientAppointmentManagement {
         return false;
     }
 
+    /**
+     * Retrieves the date of a specified appointment.
+     *
+     * @param appointmentId The ID of the appointment.
+     * @return The date of the appointment, or null if not found.
+     */
     private String getAppointmentDate(String appointmentId) {
         try (BufferedReader br = new BufferedReader(new FileReader(FilePaths.APPOINTMENT_LIST_PATH))) {
             String line;
@@ -243,6 +301,13 @@ public class PatientAppointmentManager implements patientAppointmentManagement {
         return null;
     }
 
+    /**
+     * Checks if a patient has an existing appointment on a specified date.
+     *
+     * @param patientId The ID of the patient.
+     * @param date The date to check.
+     * @return true if an appointment exists on the date, false otherwise.
+     */
     private boolean isAppointmentOnSameDay(String patientId, String date) {
         try (BufferedReader br = new BufferedReader(new FileReader(FilePaths.APPOINTMENT_LIST_PATH))) {
             String line;
