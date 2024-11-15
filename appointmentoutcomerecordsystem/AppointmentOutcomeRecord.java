@@ -35,16 +35,6 @@ public class AppointmentOutcomeRecord {
     public String getStatus() {return status;}
     public String getConsultationNotes() {return consultationNotes;}
 
-    /*public void setAppointmentID(String appointmentID) {this.appointmentID = appointmentID;}
-    public void setPatientID(String patientID) {this.patientID = patientID;}
-    public void setDoctorAssigned(String doctorAssigned) {this.doctorAssigned = doctorAssigned;}
-    public void setAppointmentDate(String appointmentDate) {this.appointmentDate = appointmentDate;}
-    public void setService(String service) {this.service = service;}
-    public void setMedication(String medication) {this.medication = medication;}
-    public void setQuantity(String quantity) {this.quantity = quantity;}
-    public void setStatus(String status) {this.status = status;}
-    public void setConsultationNotes(String consultationNotes) {this.consultationNotes = consultationNotes;}
-    */
 
     public void print(){ // Remove after final submission this is just to check if data is loaded correctly
         System.out.println("AppointmentID: " + appointmentID);

@@ -12,7 +12,7 @@ public class PharmacistAORUpdate implements updateOutcomeRecord {
         try {
             // Call setAppointmentOutcome to update the status in the CSV file
             CSVAppointmentOutcomeRecord.setAppointmentOutcome(FilePaths.APPOINTMENT_OUTCOME_RECORD_PATH, appointmentID, header, newValue);
-            System.out.println("Appointment ID " + appointmentID + " status updated to " + newValue);
+            System.out.println(appointmentID + " status updated from PENDING to " + newValue);
         } catch (IOException e) {
             System.out.println("Error updating appointment outcome record: " + e.getMessage());
         } catch (IllegalArgumentException e) {
@@ -39,16 +39,16 @@ public class PharmacistAORUpdate implements updateOutcomeRecord {
             }
 
             if (targetRecord == null) {
-                System.out.println("Error: " +appointmentID + " not found in the records.");
+                System.out.println(appointmentID + " not found in the records.");
                 return;
             }
 
             // Check if the current status is "pending" before updating to "approved"
-            if (!targetRecord.getStatus().equalsIgnoreCase("pending")) {
-                System.out.println(appointmentID + " has already been approved.");
+            if (!targetRecord.getStatus().equalsIgnoreCase("PENDING")) {
+                System.out.println(appointmentID + " has already been APPROVED.");
             } else {
                 // Update the status to "dispensed"
-                updateAppointmentOutcomeRecord(appointmentID, "Status", "approved");
+                updateAppointmentOutcomeRecord(appointmentID, "Status", "APPROVED");
             }
         } catch (IOException e) {
             System.out.println("Error loading appointment outcome records: " + e.getMessage());

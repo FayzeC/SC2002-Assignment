@@ -4,9 +4,18 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utility class for managing appointment outcome records stored in a CSV file.
+ */
 public class CSVAppointmentOutcomeRecord {
 
-    // Load all appointment outcome records from the CSV file
+    /**
+     * Loads all appointment outcome records from the specified CSV file.
+     *
+     * @param filePath the path to the CSV file.
+     * @return a list of {@link AppointmentOutcomeRecord} objects.
+     * @throws IOException if an I/O error occurs while reading the file.
+     */
     public static List<AppointmentOutcomeRecord> loadApptOutcomeRecord(String filePath) throws IOException {
         List<AppointmentOutcomeRecord> apptOutcomeRecords = new ArrayList<>();
 
@@ -38,37 +47,16 @@ public class CSVAppointmentOutcomeRecord {
         return apptOutcomeRecords;
     }
 
-    // Get a specific field value for a given appointment date and header
-    public String getOutcomeValue(String filePath, String appointmentDate, String header) throws IOException {
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line = br.readLine(); // Read header row
-            String[] headers = line.split(",");
-            int headerIndex = -1;
-
-            // Find index of the specified header
-            for (int i = 0; i < headers.length; i++) {
-                if (headers[i].trim().equalsIgnoreCase(header)) {
-                    headerIndex = i;
-                    break;
-                }
-            }
-
-            if (headerIndex == -1) {
-                throw new IllegalArgumentException("Header \"" + header + "\" not found in the CSV file.");
-            }
-
-            // Search for appointment date in subsequent rows
-            while ((line = br.readLine()) != null) {
-                String[] fields = line.split(",");
-                if (fields[0].trim().equalsIgnoreCase(appointmentDate)) {
-                    return fields[headerIndex].trim(); // Return requested field value
-                }
-            }
-        }
-        throw new IllegalArgumentException("Appointment date \"" + appointmentDate + "\" not found in the CSV file.");
-    }
-
-    // Update a specific field value for a given appointment date and header
+    /**
+     * Updates a specific field value for a given appointment ID and header.
+     *
+     * @param filePath   the path to the CSV file.
+     * @param appointmentId the appointment ID to search for.
+     * @param header     the column header to update.
+     * @param newValue   the new value for the field.
+     * @throws IOException if an I/O error occurs while accessing the file.
+     * @throws IllegalArgumentException if the header or appointment ID is not found.
+     */
     public static void setAppointmentOutcome(String filePath, String appointmentId, String header, String newValue) throws IOException {
         List<String[]> lines = new ArrayList<>();
         int headerColumnIndex = -1;
@@ -122,7 +110,21 @@ public class CSVAppointmentOutcomeRecord {
         }
     }
 
-    // Add a new appointment outcome record to the CSV file
+    /**
+     * Adds a new appointment outcome record to the CSV file.
+     *
+     * @param filePath           the path to the CSV file.
+     * @param appointmentId      the appointment ID.
+     * @param patientId          the patient ID.
+     * @param doctorId           the doctor ID.
+     * @param date               the appointment date.
+     * @param service            the service provided.
+     * @param medication         the medication prescribed.
+     * @param quantity           the quantity of medication.
+     * @param status             the status of the appointment outcome.
+     * @param consultationNotes  the consultation notes.
+     * @throws IOException if an I/O error occurs while writing to the file.
+     */
     public static void addAppointmentOutcomeRecord(String filePath, String appointmentId, String patientId, String doctorId, String date, String service, String medication, String quantity, String status, String consultationNotes)
             throws IOException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
@@ -131,8 +133,56 @@ public class CSVAppointmentOutcomeRecord {
         }
     }
 
-    // Remove an appointment outcome record by appointment date
-    public void removeAppointmentOutcomeRecord(String filePath, String appointmentDate) throws IOException {
+    /*
+    /**
+     * Retrieves a specific field value for a given appointment date and header.
+     *
+     * @param filePath        the path to the CSV file.
+     * @param appointmentDate the appointment date to search for.
+     * @param header          the column header to retrieve.
+     * @return the value of the specified field.
+     * @throws IOException if an I/O error occurs while reading the file.
+     * @throws IllegalArgumentException if the header or appointment date is not found.
+    */
+    /*public String getOutcomeValue(String filePath, String appointmentDate, String header) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line = br.readLine(); // Read header row
+            String[] headers = line.split(",");
+            int headerIndex = -1;
+
+            // Find index of the specified header
+            for (int i = 0; i < headers.length; i++) {
+                if (headers[i].trim().equalsIgnoreCase(header)) {
+                    headerIndex = i;
+                    break;
+                }
+            }
+
+            if (headerIndex == -1) {
+                throw new IllegalArgumentException("Header \"" + header + "\" not found in the CSV file.");
+            }
+
+            // Search for appointment date in subsequent rows
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields[0].trim().equalsIgnoreCase(appointmentDate)) {
+                    return fields[headerIndex].trim(); // Return requested field value
+                }
+            }
+        }
+        throw new IllegalArgumentException("Appointment date \"" + appointmentDate + "\" not found in the CSV file.");
+    }*/
+
+    /*
+    /**
+     * Removes an appointment outcome record by appointment date.
+     *
+     * @param filePath        the path to the CSV file.
+     * @param appointmentDate the appointment date to search for.
+     * @throws IOException if an I/O error occurs while processing the file.
+     * @throws IllegalArgumentException if the appointment date is not found.
+     */
+    /*public void removeAppointmentOutcomeRecord(String filePath, String appointmentDate) throws IOException {
         File tempFile = new File("temp.csv");
         boolean removed = false;
 
@@ -162,5 +212,5 @@ public class CSVAppointmentOutcomeRecord {
         if (!tempFile.renameTo(new File(filePath))) {
             throw new IOException("Failed to replace the original CSV file.");
         }
-    }
+    }*/
 }

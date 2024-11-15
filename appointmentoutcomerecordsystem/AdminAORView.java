@@ -17,7 +17,7 @@ public class AdminAORView implements viewOutcomeRecord {
             boolean recordFound = false;
             int counter = 0;
             for (AppointmentOutcomeRecord record : outcomeRecords) {
-                if ("pending".equalsIgnoreCase(record.getStatus())) {
+                if ("Approved".equalsIgnoreCase(record.getStatus())) {
                     counter++;
                     System.out.println("--------------- Appointment Outcome Record: " + counter + " ----------------");
                     System.out.println("Appointment ID: " + record.getAppointmentID());

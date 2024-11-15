@@ -22,15 +22,14 @@ public class DoctorAORAdd implements addOutcomeRecord {
     private StringBuilder quantity = new StringBuilder();
     private String service;
     private String consultationNotes;
-    private String apptStatus;
+    private String apptStatus = "";
 
-    private void findAppointmentDetails(String appointmentID) {
+    private void findAppointmentDetails(String appointmentID, String doctorID) throws IOException {
         File file = new File(FilePaths.APPOINTMENT_LIST_PATH);
 
         // Check if file exists
         if (!file.exists()) {
-            System.err.println("Error: " + FilePaths.APPOINTMENT_LIST_PATH + " does not exist.");
-            return;
+            throw new IllegalArgumentException (FilePaths.APPOINTMENT_LIST_PATH + " does not exist.");
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -46,20 +45,25 @@ public class DoctorAORAdd implements addOutcomeRecord {
                 }
 
                 String[] fields = line.split(",");
-                if (fields.length >= 4 && fields[0].trim().equals(appointmentID)) { // Appointment ID is in the 1st column
-                    this.patientID = fields[3].trim();     // Patient ID in 4th column
-                    this.appointmentDate = fields[1].trim(); // Date in 2nd column
-                    this.apptStatus = fields[7].trim();
-                    appointmentFound = true;
-                    System.out.println("Appointment found:");
-                    System.out.println("Patient ID: " + this.patientID);
-                    System.out.println("Appointment Date: " + this.appointmentDate);
-                    break;
+                if (fields.length >= 4 && fields[0].trim().equals(appointmentID)) {
+                    if (!fields[5].trim().equals(doctorID)) {
+                        throw new IllegalArgumentException (appointmentID + " does not belong to " + doctorID + ".\n");
+                    }
+                    else {
+                        this.patientID = fields[3].trim();     // Patient ID in 4th column
+                        this.appointmentDate = fields[1].trim(); // Date in 2nd column
+                        this.apptStatus = fields[7].trim();
+                        appointmentFound = true;
+                        System.out.println("+========= Appointment found =========+");
+                        System.out.println("Patient ID: " + this.patientID);
+                        System.out.println("Appointment Date: " + this.appointmentDate);
+                        break;
+                    }
                 }
             }
 
             if (!appointmentFound) {
-                System.out.println("No appointment found with ID: " + appointmentID);
+                throw new IllegalArgumentException (appointmentID + " not found in the records.\n");
             }
         } catch (IOException e) {
             System.err.println("Error reading appointment details: " + e.getMessage());
@@ -73,26 +77,61 @@ public class DoctorAORAdd implements addOutcomeRecord {
         CSVInventory inventoryManager = new CSVInventory();
         List<Inventory> inventoryList = inventoryManager.loadInventory(FilePaths.INVENTORY_LIST_PATH);
 
-        /// Initialize medication and quantity strings
+        // Initialize medication and quantity strings
         Set<String> selectedMedicines = new HashSet<>();
         String input = "";
 
-        System.out.print("Enter Type of Service: ");
-        service = scanner.nextLine().trim();
+        while (true) {
+            System.out.println("\nSelect a Type of Service:");
+            System.out.println("1. Consultation");
+            System.out.println("2. Dental");
+            System.out.println("3. X-Ray");
+            System.out.println("4. Surgery");
+            System.out.println("5. Physiotherapy");
+            System.out.println("6. Therapy");
+            System.out.print("Enter choice: ");
+            String choice = scanner.nextLine().trim();
+
+            switch (choice) {
+                case "1":
+                    service = "Consultation";
+                    break;
+                case "2":
+                    service = "Dental";
+                    break;
+                case "3":
+                    service = "X-Ray";
+                    break;
+                case "4":
+                    service = "Surgery";
+                    break;
+                case "5":
+                    service = "Physiotherapy";
+                    break;
+                case "6":
+                    service = "Therapy";
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please select a valid option");
+                    continue; // Prompt the user again if input is invalid
+            }
+            break; // Exit the loop if a valid option is selected
+        }
+
         // Allow the user to select multiple medications
         while (true) {
             // Display available medicines with a "Done" option
-            System.out.println("Available medicines:");
+            System.out.println("\nAvailable medicines:");
             for (int i = 0; i < inventoryList.size(); i++) {
                 System.out.println((i + 1) + ". " + inventoryList.get(i).getMedicineName());
             }
-            System.out.println((inventoryList.size() + 1) + ". Done");
+            System.out.println((inventoryList.size() + 1) + ". Exit");
 
             System.out.print("Select a medicine by number: ");
             input = scanner.nextLine().trim().toLowerCase();
 
-            // Check if the user selected the "Done" option
-            if (input.equals(String.valueOf(inventoryList.size() + 1)) || input.equals("done")) {
+            // Check if the user selected the "Exit" option
+            if (input.equals(String.valueOf(inventoryList.size() + 1))) {
                 // If no medications were added, set defaults
                 if (medication.length() == 0) {
                     medication.append("none");
@@ -106,25 +145,28 @@ public class DoctorAORAdd implements addOutcomeRecord {
 
                 // Validate the user's choice
                 if (medicineChoice < 0 || medicineChoice >= inventoryList.size()) {
-                    throw new IllegalArgumentException("Invalid choice. Please select a valid number from the list.");
+                    throw new IllegalArgumentException("Please select a valid number from the list.");
                 }
 
                 String selectedMedicine = inventoryList.get(medicineChoice).getMedicineName();
 
                 // Check if the medicine was already selected
                 if (selectedMedicines.contains(selectedMedicine)) {
-                    System.out.println("This medicine has already been selected. Please choose a different medicine.");
+                    System.out.println("This medicine has already been selected. Please choose a different medicine.\n");
                     continue; // Prompt the user to choose another medicine
                 } else { selectedMedicines.add(selectedMedicine);}
 
                 // Prompt for quantity of the selected medicine
-                System.out.print("Enter quantity for " + selectedMedicine + ": ");
+                System.out.print("\nEnter quantity for " + selectedMedicine + ": ");
                 String qty = scanner.nextLine().trim();
 
-                // Validate that the quantity is a positive integer
-                if (!qty.matches("\\d+") || Integer.parseInt(qty) <= 0) {
-                    System.out.println("Invalid quantity. Please enter a positive integer.");
-                    continue; // Restart the loop to select a valid quantity
+                // Validate that the quantity is a integer, positive, and non-zero
+                if (!qty.matches("\\d+")) {
+                    throw new IllegalArgumentException("Please enter an integer.");
+                } else if (Integer.parseInt(qty) < 0) {
+                    throw new IllegalArgumentException("Quantity cannot be negative.");
+                } else if (Integer.parseInt(qty) == 0) {
+                    throw new IllegalArgumentException("Quantity of this medicine cannot be 0.");
                 }
 
                 // Add selected medicine and quantity to respective strings
@@ -138,27 +180,27 @@ public class DoctorAORAdd implements addOutcomeRecord {
                 System.out.println("Invalid input: " + e.getMessage());
             }
         }
-
-        System.out.print("Enter Consultation Notes: ");
+        System.out.print("\nEnter Consultation Notes: ");
         consultationNotes = scanner.nextLine().trim();
 
-        // Validate inputs (basic validation)
-        if (medication.isEmpty() || quantity.isEmpty() || consultationNotes.isEmpty()) {
-            throw new IllegalArgumentException("All fields must be filled. Please try again.");
+        // If consultationNotes is empty, set it to "NIL"
+        if (consultationNotes.isEmpty()) {
+            consultationNotes = "NIL";
         }
     }
 
     private void changeAppointmentStatus(String appointmentID) throws IOException {
         try {
-            // Call CSVDataUpdater's updateCSVCell to change the status to "COMPLETED"
-            CSVUpdater.updateCSVCell(
-                    FilePaths.APPOINTMENT_LIST_PATH,  // Path to the appointment list CSV file
-                    "Appointment ID",                  // Column to search by
-                    appointmentID,                     // Value to match in Appointment ID column
-                    "Status",                          // Column to update
-                    "COMPLETED"                        // New status value
+            // Call CSVDataUpdater to change the status to "COMPLETED"
+            CSVUpdater.updater(FilePaths.APPOINTMENT_LIST_PATH,
+                    appointmentID,
+                    null,
+                    "Status",
+                    "COMPLETED",
+                    0,
+                    0
             );
-            System.out.println("Appointment Status has been successfully updated from CONFIRMED to COMPLETED for " + appointmentID );
+            System.out.println(appointmentID + " status has been successfully updated from CONFIRMED to COMPLETED" );
         } catch (IOException e) {
             System.err.println("Error updating appointment status: " + e.getMessage());
         }
@@ -170,10 +212,19 @@ public class DoctorAORAdd implements addOutcomeRecord {
         try{
             System.out.print("Enter Appointment ID: ");
             String appointmentID = scanner.nextLine().trim();
-            findAppointmentDetails(appointmentID);
-            if (!apptStatus.equals("CONFIRMED")) {
-                System.out.println("Appointment is not CONFIRMED. Please try again with a CONFIRMED appointment.");
-                return;
+
+            try {
+                findAppointmentDetails(appointmentID, doctorID);
+
+                // Check appointment status only if findAppointmentDetails succeeds
+                if (!apptStatus.equals("CONFIRMED")) {
+                    System.out.println("Appointment is not CONFIRMED. Please try again with a CONFIRMED appointment.");
+                    return;
+                }
+            } catch (Exception e) {
+                // Handle any exception thrown by findAppointmentDetails
+                System.out.println("Error finding appointment details: " + e.getMessage());
+                return; // Exit if finding appointment details fails
             }
             additionalDetails();
             CSVAppointmentOutcomeRecord.addAppointmentOutcomeRecord(
@@ -185,10 +236,10 @@ public class DoctorAORAdd implements addOutcomeRecord {
                     service,
                     medication.toString(),
                     quantity.toString(),
-                    "pending",              // initial status
+                    "PENDING",              // initial status
                     consultationNotes
             );
-            System.out.println("New appointment outcome record added for Appointment ID " + appointmentID);
+            System.out.println("New appointment outcome record added for " + appointmentID);
             changeAppointmentStatus(appointmentID);
         } catch (IOException e) {
             System.out.println("Error adding appointment outcome record: " + e.getMessage());

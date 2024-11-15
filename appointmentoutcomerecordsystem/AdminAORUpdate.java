@@ -20,7 +20,7 @@ public class AdminAORUpdate implements updateOutcomeRecord {
         }
     }
 
-    // Update status from "approved" to "dispensed"
+    // Update status from "APPROVED" to "DISPENSED"
     public void dispenseAppointmentOutcomeRecord() {
         try {
             Scanner scanner = new Scanner(System.in);
@@ -43,14 +43,14 @@ public class AdminAORUpdate implements updateOutcomeRecord {
                 return;
             }
 
-            // Check if the current status is "approved" before updating to "dispensed"
-            if (targetRecord.getStatus().equalsIgnoreCase("pending")) {
-                System.out.println(appointmentID + "has yet to be approved yet.");
-            } else if (targetRecord.getStatus().equalsIgnoreCase("dispensed")) {
-                System.out.println(appointmentID + " has already been dispensed.");
+            // Check if the current status is "APPROVED" before updating to "DISPENSED"
+            if (targetRecord.getStatus().equalsIgnoreCase("PENDING")) {
+                System.out.println(appointmentID + "has yet to be APPROVED yet.");
+            } else if (targetRecord.getStatus().equalsIgnoreCase("DISPENSED")) {
+                System.out.println(appointmentID + " has already been DISPENSED.");
             } else {
-                // Update the status to "dispensed"
-                updateAppointmentOutcomeRecord(appointmentID, "Status", "dispensed");
+                // Update the status to "DISPENSED"
+                updateAppointmentOutcomeRecord(appointmentID, "Status", "DISPENSED");
             }
 
         } catch (IOException e) {
