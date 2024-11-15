@@ -100,7 +100,7 @@ public class AuthService {
                 System.out.println("This is your first login. We recommend you change your password for security purposes.");
 
                 // Determine the appropriate filename based on user role
-                if(user.getRole().equals("Patient")) {
+                if(user.getRole().equals("roles.Patient")) {
                     filename = FilePaths.PATIENT_LIST_PATH;
                 } else {
                     filename = FilePaths.STAFF_LIST_PATH;
