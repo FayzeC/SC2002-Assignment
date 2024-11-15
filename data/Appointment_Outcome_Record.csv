@@ -1,0 +1,7 @@
+Appointment ID,Patient ID,Doctor Assigned,Appointment Date,Service,Medication,Quantity,Status,Consultation Notes
+PA3,P1001,D001,2024-11-24,test,Help,19,APPROVED,asdfghjk
+PA15,P1002,D001,2024-11-28,Consultation,Ibuprofen/Help,3/1,APPROVED,YIPYEEE
+PA21,P1001,D001,2024-12-12,Dental,Paracetamol,3,PENDING,Hope this works
+PA22,P1002,D001,2024-12-03,Physiotherapy,none,0,PENDING,All good
+PA2,P1002,D001,2024-11-24,X-Ray,none,0,APPROVED,NIL
+PA8,P1002,D002,2024-11-25,Consultation,Help,100,PENDING,Copium lots of it
