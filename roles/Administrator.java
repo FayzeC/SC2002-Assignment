@@ -5,9 +5,9 @@ import appointmentsystem.AdminAppointmentView;
 import appointmentsystem.CSVAppointment;
 import filemanager.FilePaths;
 import inventorysystem.AdminInventory;
-import staffmanagement.AdminStaffManager;
-import staffmanagement.CSVStaff;
-import staffmanagement.StaffDisplayViewer;
+import staffmanagementsystem.AdminStaffManager;
+import staffmanagementsystem.CSVStaff;
+import staffmanagementsystem.StaffDisplayViewer;
 
 import java.io.IOException;
 
