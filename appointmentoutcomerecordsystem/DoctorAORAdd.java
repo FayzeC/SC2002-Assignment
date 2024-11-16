@@ -154,7 +154,7 @@ public class DoctorAORAdd implements addOutcomeRecord {
                 if (selectedMedicines.contains(selectedMedicine)) {
                     System.out.println("This medicine has already been selected. Please choose a different medicine.\n");
                     continue; // Prompt the user to choose another medicine
-                } else { selectedMedicines.add(selectedMedicine);}
+                }
 
                 // Prompt for quantity of the selected medicine
                 System.out.print("\nEnter quantity for " + selectedMedicine + ": ");
@@ -162,7 +162,7 @@ public class DoctorAORAdd implements addOutcomeRecord {
 
                 // Validate that the quantity is a integer, positive, and non-zero
                 if (!qty.matches("\\d+")) {
-                    throw new IllegalArgumentException("Please enter an integer.");
+                    throw new IllegalArgumentException("Please enter a positive integer.");
                 } else if (Integer.parseInt(qty) < 0) {
                     throw new IllegalArgumentException("Quantity cannot be negative.");
                 } else if (Integer.parseInt(qty) == 0) {
@@ -174,6 +174,7 @@ public class DoctorAORAdd implements addOutcomeRecord {
                     medication.append("/"); // Add separator if it's not the first medicine
                     quantity.append("/");
                 }
+                selectedMedicines.add(selectedMedicine);
                 medication.append(selectedMedicine);
                 quantity.append(qty);
             } catch (IllegalArgumentException e) {

@@ -44,10 +44,12 @@ public class PharmacistAORUpdate implements updateOutcomeRecord {
             }
 
             // Check if the current status is "pending" before updating to "approved"
-            if (!targetRecord.getStatus().equalsIgnoreCase("PENDING")) {
-                System.out.println(appointmentID + " has already been APPROVED.");
+            if (targetRecord.getStatus().equalsIgnoreCase("APPROVED")) {
+                System.out.println(appointmentID + "has already been APPROVED.");
+            } else if (targetRecord.getStatus().equalsIgnoreCase("DISPENSED")) {
+                System.out.println(appointmentID + " has already been DISPENSED.");
             } else {
-                // Update the status to "dispensed"
+                // Update the status to "APPROVED"
                 updateAppointmentOutcomeRecord(appointmentID, "Status", "APPROVED");
             }
         } catch (IOException e) {
