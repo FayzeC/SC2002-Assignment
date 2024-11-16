@@ -1,6 +1,6 @@
 package roles;
 
-import staffmanagement.*;
+import staffmanagementsystem.*;
 
 import java.io.IOException;
 import java.util.Scanner;
