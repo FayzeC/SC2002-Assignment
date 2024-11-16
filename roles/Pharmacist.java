@@ -73,7 +73,7 @@ public class Pharmacist extends User {
                 pInventory.viewInventory(); // View the medication inventory
                 break;
             case 4:
-                pInventory.submitReplenishRequest(); // Submit a request to replenish inventory
+                pInventory.sendReplenishRequest(); // Submit a request to replenish inventory
                 break;
             case 5:
                 changePassword(FilePaths.STAFF_LIST_PATH); // Change password for the pharmacist
