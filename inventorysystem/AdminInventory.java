@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map; // Add this line
+
+
 
 public class AdminInventory extends InventoryManagement {
     CSVInventory inventoryUpdater = new CSVInventory();
@@ -51,7 +55,6 @@ public class AdminInventory extends InventoryManagement {
         try {
             // Call the addInventoryItem method to add a new row
             inventoryUpdater.addInventoryItem(FilePaths.INVENTORY_LIST_PATH, name, stock, lowStockLevel);
-            System.out.println("Item added successfully!");
         } catch (IOException e) {
             System.err.println("Failed to add item: " + e.getMessage());
         }
@@ -95,7 +98,6 @@ public class AdminInventory extends InventoryManagement {
         try {
             // Update the stock column for the specified item
             inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, name, "Initial Stock", stock);
-            System.out.println("Stock updated successfully!");
         } catch (IOException e) {
             System.err.println("Failed to update stock: " + e.getMessage());
         }
@@ -124,7 +126,6 @@ public class AdminInventory extends InventoryManagement {
         try {
             // Update the low stock alert level for the specified item
             inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, name, "Low Stock Level Alert", lowStockLevel);
-            System.out.println("Low stock level updated successfully!");
         } catch (IOException e) {
             System.err.println("Failed to update low stock level: " + e.getMessage());
         }
@@ -133,7 +134,7 @@ public class AdminInventory extends InventoryManagement {
 
     // Method to process stock replenishment
     public void processReplenishRequest() {
-        List<Inventory> itemsWithRequests = new ArrayList<>();
+        Map<Inventory, Integer> itemsWithRequests = new HashMap<>();
 
         // Gather all items with pending replenish requests
         for (Inventory inventory : getInventoryList()) {
@@ -142,7 +143,7 @@ public class AdminInventory extends InventoryManagement {
                         inventory.getMedicineName(), "Replenish Request");
 
                 if (replenishRequestCount != null && Integer.parseInt(replenishRequestCount) > 0) {
-                    itemsWithRequests.add(inventory);
+                    itemsWithRequests.put(inventory, Integer.parseInt(replenishRequestCount));
                 }
             } catch (IOException e) {
                 System.err.println("Failed to retrieve replenish request count for " + inventory.getMedicineName()
@@ -158,30 +159,31 @@ public class AdminInventory extends InventoryManagement {
 
         // Display items with pending replenish requests
         System.out.println("Items with pending replenish requests:");
-        for (int i = 0; i < itemsWithRequests.size(); i++) {
-            Inventory inventory = itemsWithRequests.get(i);
+        List<Inventory> inventoryList = new ArrayList<>(itemsWithRequests.keySet());
+        for (int i = 0; i < inventoryList.size(); i++) {
+            Inventory inventory = inventoryList.get(i);
+            int replenishCount = itemsWithRequests.get(inventory);
             System.out.println((i + 1) + ". " + inventory.getMedicineName() + " - Current Stock: "
-                    + inventory.getInitialStock() + ", Low Stock Alert: " + inventory.getLowStockAlert());
+                    + inventory.getInitialStock() + ", Low Stock Alert: " + inventory.getLowStockAlert()
+                    + ", Amount of requests: " + replenishCount);
         }
 
         // Prompt user to select an item to fulfill
-        Scanner sc = new Scanner(System.in);
         System.out.print("Enter the number of the item you want to fulfill: ");
         int choice = sc.nextInt();
 
         // Validate the user's choice
-        if (choice < 1 || choice > itemsWithRequests.size()) {
+        if (choice < 1 || choice > inventoryList.size()) {
             System.out.println("Invalid selection. No replenishment processed.");
             return;
         }
 
         // Process the selected item for replenishment
-        Inventory selectedInventory = itemsWithRequests.get(choice - 1);
-        int newStockLevel = selectedInventory.getLowStockAlert() + 10; // Set stock to 10 units above the low stock
-        // alert level
+        Inventory selectedInventory = inventoryList.get(choice - 1);
+        int newStockLevel = selectedInventory.getLowStockAlert() + 10; // Set stock to 10 units above the low stock alert level
 
         try {
-            // Update stock level in the Excel file
+            // Update stock level in the file
             inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, selectedInventory.getMedicineName(),
                     "Initial Stock", String.valueOf(newStockLevel));
             // Reset the replenish request count to 0 after fulfilling
@@ -194,4 +196,6 @@ public class AdminInventory extends InventoryManagement {
                     "Failed to update inventory for " + selectedInventory.getMedicineName() + ": " + e.getMessage());
         }
     }
+
+
 }

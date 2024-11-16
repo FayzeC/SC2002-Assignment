@@ -29,8 +29,12 @@ public class PharmaInventory extends InventoryManagement {
                 itemFound = true;
                 if (inventory.getInitialStock() < inventory.getLowStockAlert()) { // Check if stock is below alert level
                     try {
-                        inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, name, "Replenish Request", "1");
-                        System.out.println("Replenish request sent successfully.");
+                        String currentReplenishValue = inventoryUpdater.getReplenishValue(FilePaths.INVENTORY_LIST_PATH, name, "Replenish Request");
+                        int updatedReplenishValue = Integer.parseInt(currentReplenishValue) + 1; // Increment the value by 1
+
+                        // Pass the updated value to the updateInventory method
+                        inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, name, "Replenish Request", String.valueOf(updatedReplenishValue));
+
                     } catch (IOException e) {
                         System.err.println("Failed to send replenish request: " + e.getMessage());
                     }

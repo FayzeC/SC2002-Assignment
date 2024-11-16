@@ -113,9 +113,10 @@ public class CSVInventory {
             for (String[] row : lines) {
                 pw.println(String.join(",", row));
             }
+            System.out.println("Successfully updated \"" + header + "\" for medicine \"" + medicineName + "\".");
         }
 
-        System.out.println("Successfully updated \"" + header + "\" for medicine \"" + medicineName + "\".");
+
     }
 
 
@@ -143,7 +144,7 @@ public class CSVInventory {
 
         // If the medicine already exists, return without adding it
         if (exists) {
-            System.out.println("Medicine \"" + medicineName + "\" already exists in the inventory.");
+            System.out.println("Medicine \"" + medicineName + "\" already exists in the inventory, adding failed.");
             return;
         }
 
@@ -151,8 +152,8 @@ public class CSVInventory {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
             bw.write(medicineName + "," + stock + "," + lowStockLevel + "," + "0");
             bw.newLine();
+            System.out.println("Item added successfully!");
         }
-        System.out.println("Item added successfully!");
     }
 
 
