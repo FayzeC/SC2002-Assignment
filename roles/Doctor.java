@@ -109,8 +109,8 @@ public class Doctor extends User {
                 schedule.viewUpcomingAppointments(getHospitalID());
                 break;
             case 7:
-                // Implement Record Appointment Outcome functionality if needed
                 aorADD.addAppointmentOutcomeRecord(getHospitalID());
+                break;
             case 8:
                 changePassword(FilePaths.STAFF_LIST_PATH);
                 break;
