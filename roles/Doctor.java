@@ -139,4 +139,13 @@ public class Doctor extends User {
     public String toString() {
         return "Doctor " + getName();
     }
+
+    /**
+     * Retrieves the age of the Doctor.
+     *
+     * @return The age of the Doctor.
+     */
+    public String getAge() {
+        return age;
+    }
 }
