@@ -33,6 +33,10 @@ public class DoctorAppointmentManager extends DoctorScheduleView implements doct
             System.out.println("Invalid appointment ID.");
             return;
         }
+        if (!doesAppointmentExist(appointmentId.trim())) {
+            System.out.println("Error: Appointment ID " + appointmentId + " does not exist.");
+            return;
+        }
         if (isAppointmentAssignedToDoctor(doctorId.trim(), appointmentId.trim())) {
             updateAppointmentStatus(appointmentId.trim(), "CONFIRMED");
             System.out.println("Appointment ID " + appointmentId + " has been accepted.");
@@ -59,6 +63,10 @@ public class DoctorAppointmentManager extends DoctorScheduleView implements doct
             System.out.println("Invalid appointment ID.");
             return;
         }
+        if (!doesAppointmentExist(appointmentId.trim())) {
+            System.out.println("Error: Appointment ID " + appointmentId + " does not exist.");
+            return;
+        }
         if (isAppointmentAssignedToDoctor(doctorId.trim(), appointmentId.trim())) {
             updateAppointmentStatus(appointmentId.trim(), "CANCELLED");
             System.out.println("Appointment ID " + appointmentId + " has been declined.");
@@ -67,6 +75,34 @@ public class DoctorAppointmentManager extends DoctorScheduleView implements doct
         } else {
             System.out.println("Error: You (" + doctorId + ") are not assigned to Appointment ID " + appointmentId + ".");
         }
+    }
+
+    /**
+     * Checks if an appointment ID exists in the appointment list.
+     *
+     * @param appointmentId The ID of the appointment to check.
+     * @return true if the appointment exists, false otherwise.
+     */
+    private boolean doesAppointmentExist(String appointmentId) {
+        try (BufferedReader br = new BufferedReader(new FileReader(FilePaths.APPOINTMENT_LIST_PATH))) {
+            String line;
+            boolean isFirstRow = true;
+
+            while ((line = br.readLine()) != null) {
+                if (isFirstRow) { // Skip header row
+                    isFirstRow = false;
+                    continue;
+                }
+
+                String[] fields = line.split(",");
+                if (fields.length >= 1 && fields[0].trim().equalsIgnoreCase(appointmentId)) {
+                    return true; // Appointment exists
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error checking if appointment exists: " + e.getMessage());
+        }
+        return false;
     }
 
     /**
@@ -109,7 +145,6 @@ public class DoctorAppointmentManager extends DoctorScheduleView implements doct
      * @param appointmentId The ID of the appointment.
      * @return true if a patient has selected the appointment, false otherwise.
      */
-    // New method to check if an appointment is selected by any patient
     private boolean isAppointmentSelectedByPatient(String appointmentId) {
         try (BufferedReader br = new BufferedReader(new FileReader(FilePaths.APPOINTMENT_LIST_PATH))) {
             String line;
@@ -180,13 +215,10 @@ public class DoctorAppointmentManager extends DoctorScheduleView implements doct
                 if (isDoctorAlreadyAssigned(patientId, doctorId)) {
                     System.out.println("Doctor ID " + doctorId + " is already assigned to Patient ID " + patientId + ". No update needed.");
                 } else {
-                    // Check if the current doctor assignment is "NA"
                     if (isCurrentDoctorNA(patientId)) {
-                        // If current doctor is "NA", directly update the record with the new doctor ID
                         CSVUpdater.updater(FilePaths.PATIENT_LIST_PATH, patientId, null, "Doctor Assigned", doctorId, 0, 0);
                         System.out.println("Updated Doctor ID for Patient ID " + patientId + " to " + doctorId + " in patient_list.csv.");
                     } else {
-                        // Otherwise, add a new patient record for the additional doctor assignment
                         addNewPatientRecord(patientId, doctorId);
                         System.out.println("Added new record for Patient ID " + patientId + " with Doctor ID " + doctorId + " in patient_list.csv.");
                     }

@@ -65,7 +65,7 @@ public class DoctorInformationAccess implements InformationAccess {
                     System.out.println("---------- Medical History ----------");
                     for (Patient record : records) {
                         System.out.println("Doctor ID: " + record.getDoctorAssigned() + "\n" +
-                                "Past Diagnosis: " + record.getPastDiagnosis() + "\n"+
+                                "Past Diagnosis: " + record.getPastDiagnosis() + "\n" +
                                 "Past Treatment: " + record.getPastTreatment() + "\n" +
                                 "------------------------------------");
                     }
@@ -118,16 +118,13 @@ public class DoctorInformationAccess implements InformationAccess {
 
         System.out.print("\nEnter the Patient ID to update records: ");
         String patientId = scanner.nextLine();
-        Patient targetPatient = null;
 
-        for (Patient patient : patients) {
-            if (patient.getHospitalID().equals(patientId) && patient.getDoctorAssigned().equals(doctor.getHospitalID())) {
-                targetPatient = patient;
-                break;
-            }
+        if (!patientExists(patientId)) {
+            System.out.println("Error: Patient ID " + patientId + " does not exist.");
+            return;
         }
 
-        if (targetPatient == null) {
+        if (!isAssignedToDoctor(patientId, doctor.getHospitalID())) {
             System.out.println("Error: Patient ID " + patientId + " is not assigned to you.");
             return;
         }
@@ -142,19 +139,59 @@ public class DoctorInformationAccess implements InformationAccess {
     }
 
     /**
+     * Checks whether a patient ID exists in the CSV file.
+     *
+     * @param patientId The patient ID to validate.
+     * @return true if the patient ID exists; false otherwise.
+     */
+    private boolean patientExists(String patientId) {
+        try {
+            List<Patient> allPatients = CSVDataLoader.loadPatients(FilePaths.PATIENT_LIST_PATH);
+            for (Patient patient : allPatients) {
+                if (patient.getHospitalID().equals(patientId)) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error validating patient existence: " + e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * Checks whether a patient is assigned to the specified doctor.
+     *
+     * @param patientId The patient ID to validate.
+     * @param doctorId  The doctor ID to check against.
+     * @return true if the patient is assigned to the doctor; false otherwise.
+     */
+    private boolean isAssignedToDoctor(String patientId, String doctorId) {
+        try {
+            List<Patient> allPatients = CSVDataLoader.loadPatients(FilePaths.PATIENT_LIST_PATH);
+            for (Patient patient : allPatients) {
+                if (patient.getHospitalID().equals(patientId) && patient.getDoctorAssigned().equals(doctorId)) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error checking doctor assignment: " + e.getMessage());
+        }
+        return false;
+    }
+
+    /**
      * Adds a new patient record or updates an existing record for a patient with new diagnosis and
      * treatment information. If the existing diagnosis or treatment is marked as "NA," the record is updated
      * directly; otherwise, a new entry is appended to the CSV file.
      *
-     * @param patientId The ID of the patient whose records are being updated.
-     * @param doctorId The ID of the doctor updating the records.
-     * @param newDiagnosis The new diagnosis for the patient.
-     * @param newTreatment The new treatment for the patient.
+     * @param patientId     The ID of the patient whose records are being updated.
+     * @param doctorId      The ID of the doctor updating the records.
+     * @param newDiagnosis  The new diagnosis for the patient.
+     * @param newTreatment  The new treatment for the patient.
      * @throws IOException if an I/O error occurs while writing to the CSV file.
      */
     private void addOrUpdatePatientRecord(String patientId, String doctorId, String newDiagnosis, String newTreatment) throws IOException {
         List<Patient> patients = CSVDataLoader.loadPatients(FilePaths.PATIENT_LIST_PATH);
-        boolean recordUpdated = false;
 
         for (Patient patient : patients) {
             if (patient.getHospitalID().equals(patientId) && patient.getDoctorAssigned().equals(doctorId)) {
@@ -170,7 +207,6 @@ public class DoctorInformationAccess implements InformationAccess {
                                 patient.getEmail(), doctorId, newDiagnosis, newTreatment, (!patient.getFirstLogin()) ? "No" : "Yes"));
                     }
                 }
-                recordUpdated = true;
                 break;
             }
         }

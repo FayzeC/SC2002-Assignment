@@ -28,7 +28,6 @@ public class DoctorAvailability {
      *
      * @param doctor The doctor object for whom availability is being set.
      */
-    // Method to set availability for a doctor
     public void setAvailability(Doctor doctor) {
         String date;
         LocalTime startTime;
@@ -45,28 +44,37 @@ public class DoctorAvailability {
                     System.out.println("You can only set availability for future dates.");
                 }
             } else {
-                System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+                System.out.println("Invalid date format.");
             }
         }
 
-        // Prompt for start and end times in HH:mm format, ensuring they fall within a valid time range
+        // Prompt for start time
         while (true) {
             System.out.print("Enter available start time (HH:mm, between 10:00 and 21:00): ");
             String startInput = scanner.nextLine();
-            startTime = parseTime(startInput);
+            boolean[] isInvalidFormat = new boolean[1]; // Flag for format invalidity
+            startTime = parseTime(startInput, isInvalidFormat);
             if (startTime != null && isValidTimeRange(startTime)) {
                 break;
+            }
+            if (isInvalidFormat[0]) {
+                System.out.println("Invalid time format. Please use HH:mm.");
             } else {
                 System.out.println("Invalid start time. Please enter a time between 10:00 and 21:00.");
             }
         }
 
+        // Prompt for end time
         while (true) {
             System.out.print("Enter available end time (HH:mm, after start time and no later than 21:00): ");
             String endInput = scanner.nextLine();
-            endTime = parseTime(endInput);
+            boolean[] isInvalidFormat = new boolean[1]; // Flag for format invalidity
+            endTime = parseTime(endInput, isInvalidFormat);
             if (endTime != null && endTime.isAfter(startTime) && isValidTimeRange(endTime)) {
                 break;
+            }
+            if (isInvalidFormat[0]) {
+                System.out.println("Invalid time format. Please use HH:mm.");
             } else {
                 System.out.println("Invalid end time. It must be after the start time and no later than 21:00.");
             }
@@ -89,7 +97,6 @@ public class DoctorAvailability {
      * @param date The date string to validate.
      * @return true if the date is valid, false otherwise.
      */
-    // Helper method to validate date format
     private boolean isValidDate(String date) {
         try {
             LocalDate.parse(date, DATE_FORMATTER);
@@ -105,7 +112,6 @@ public class DoctorAvailability {
      * @param date The date to check.
      * @return true if the date is in the future, false otherwise.
      */
-    // Helper method to check if the date is in the future
     private boolean isFutureDate(String date) {
         LocalDate inputDate = LocalDate.parse(date, DATE_FORMATTER);
         return inputDate.isAfter(LocalDate.now());
@@ -113,16 +119,19 @@ public class DoctorAvailability {
 
     /**
      * Parses a time string in the format HH:mm and returns a LocalTime object.
+     * If the time is invalid due to format, it sets a flag that can be checked later.
      *
      * @param time The time string to parse.
+     * @param isInvalidFormat A boolean array to indicate if the invalidity is due to format.
      * @return A LocalTime object if parsing is successful, null otherwise.
      */
-    // Helper method to parse time in HH:mm format
-    private LocalTime parseTime(String time) {
+    private LocalTime parseTime(String time, boolean[] isInvalidFormat) {
         try {
             return LocalTime.parse(time, TIME_FORMATTER);
         } catch (DateTimeParseException e) {
-            System.out.println("Invalid time format. Please use HH:mm.");
+            if (!time.matches("\\d{2}:\\d{2}")) {
+                isInvalidFormat[0] = true; // Invalid format
+            }
             return null;
         }
     }
@@ -133,7 +142,6 @@ public class DoctorAvailability {
      * @param time The time to check.
      * @return true if the time is within the range, false otherwise.
      */
-    // Helper method to check if time falls within the 10:00 to 21:00 range
     private boolean isValidTimeRange(LocalTime time) {
         LocalTime minTime = LocalTime.of(10, 0);
         LocalTime maxTime = LocalTime.of(21, 0);
