@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.HashMap;
-import java.util.Map; // Add this line
-
-
+import java.util.Map;
 
 public class AdminInventory extends InventoryManagement {
     CSVInventory inventoryUpdater = new CSVInventory();

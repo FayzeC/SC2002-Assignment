@@ -108,44 +108,6 @@ public class CSVDataLoader {
     }
 
     /**
-     * Loads appointment outcome records from a CSV file. Each record is parsed into
-     * an `AppointmentOutcomeRecord` object and added to the list of appointment outcome records.
-     *
-     * @param filePath the file path to the CSV file containing appointment outcome data
-     * @return a list of AppointmentOutcomeRecord objects
-     * @throws IOException if an error occurs while reading the file
-     */
-    public static List<AppointmentOutcomeRecord> loadApptOutcomeRecord(String filePath) throws IOException {
-        List<AppointmentOutcomeRecord> apptOutcomeRecords = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            boolean isFirstRow = true;
-
-            while ((line = br.readLine()) != null) {
-                if (isFirstRow) { // Skip header row
-                    isFirstRow = false;
-                    continue;
-                }
-
-                String[] fields = line.split(",");
-                String appointmentID = fields[0].trim();
-                String patientID = fields[1].trim();
-                String doctorAssigned = fields[2].trim();
-                String appointmentDate = fields[3].trim();
-                String service = fields[4].trim();
-                String medication = fields[5].trim();
-                String consultationNotes = fields[6].trim();
-
-                // Create and add the AppointmentOutcomeRecord object
-                AppointmentOutcomeRecord apptOutcomeRecord = new AppointmentOutcomeRecord(appointmentID, patientID, doctorAssigned, appointmentDate, service, medication, consultationNotes);
-                apptOutcomeRecords.add(apptOutcomeRecord);
-            }
-        }
-        return apptOutcomeRecords;
-    }
-
-    /**
      * Loads appointment data from a CSV file. Each appointment is parsed into an `Appointment`
      * object and added to the list of appointments.
      *

@@ -20,7 +20,6 @@ public class AuthService {
     private List<Doctor> doctorList = new ArrayList<>();
     private List<Pharmacist> pharmacistList = new ArrayList<>();
     private List<Administrator> administratorList = new ArrayList<>();
-    private List<AppointmentOutcomeRecord> apptOutcomeRecordList = new ArrayList<>();
     private List<Appointment> appointmentList = new ArrayList<>();
 
     /**
@@ -43,13 +42,11 @@ public class AuthService {
             if(doctorList != null ) { doctorList.clear(); }
             if(pharmacistList != null ) { pharmacistList.clear(); }
             if(administratorList != null ) { administratorList.clear(); }
-            if(apptOutcomeRecordList != null ) { apptOutcomeRecordList.clear(); }
             if(appointmentList != null ) { appointmentList.clear(); }
 
             // Load data from CSV files
             patientList = CSVDataLoader.loadPatients(FilePaths.PATIENT_LIST_PATH);
             CSVDataLoader.loadStaff(FilePaths.STAFF_LIST_PATH, pharmacistList, doctorList, administratorList);
-            apptOutcomeRecordList = CSVDataLoader.loadApptOutcomeRecord(FilePaths.APPOINTMENT_OUTCOME_RECORD_PATH);
             appointmentList = CSVDataLoader.loadAppointments(FilePaths.APPOINTMENT_LIST_PATH);
         } catch (IOException e) {
             System.err.println("Failed to load data: " + e.getMessage());

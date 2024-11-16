@@ -2,6 +2,7 @@ package roles;
 
 import appointmentsystem.PatientAppointmentManager;
 import appointmentsystem.PatientAppointmentView;
+import appointmentoutcomerecordsystem.PatientAORView;
 import filemanager.FilePaths;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class Patient extends User {
     public String pastTreatment;
     public PatientAppointmentView appointmentView;
     public PatientAppointmentManager appointmentManager;
+    public PatientAORView aorView;
     public Scanner scanner = new Scanner(System.in);
     // Inject implementations
     private InformationAccess informationAccess;
@@ -57,6 +59,7 @@ public class Patient extends User {
         this.pastTreatment = pastTreatment;
         this.appointmentView = new PatientAppointmentView();
         this.appointmentManager = new PatientAppointmentManager();
+        this.aorView = new PatientAORView();
     }
 
     /**
@@ -117,6 +120,7 @@ public class Patient extends User {
             case 7: appointmentView.viewAppointmentStatus(getHospitalID());
                 break;
             case 8:
+                aorView.viewAppointmentOutcomeRecord(getHospitalID());
                 break;
             case 9:
                 changePassword(FilePaths.PATIENT_LIST_PATH);

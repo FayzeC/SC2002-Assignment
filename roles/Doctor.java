@@ -1,5 +1,6 @@
 package roles;
 
+import appointmentoutcomerecordsystem.DoctorAORAdd;
 import appointmentsystem.DoctorInformationAccess;
 import appointmentsystem.DoctorAppointmentManager;
 import appointmentsystem.DoctorAvailability;
@@ -26,6 +27,7 @@ public class Doctor extends User {
     private DoctorAppointmentManager appointmentManager;
     private DoctorScheduleView schedule;
     private DoctorInformationAccess informationAccess;
+    private DoctorAORAdd aorADD;
 
     /**
      * Constructor to initialize a Doctor with essential details and dependencies.
@@ -46,6 +48,7 @@ public class Doctor extends User {
         this.appointmentManager = new DoctorAppointmentManager();
         this.schedule = new DoctorScheduleView();
         this.informationAccess = new DoctorInformationAccess();
+        this.aorADD = new DoctorAORAdd();
     }
 
     /**
@@ -106,7 +109,8 @@ public class Doctor extends User {
                 schedule.viewUpcomingAppointments(getHospitalID());
                 break;
             case 7:
-                break; // Appointment outcome functionality not implemented yet
+                // Implement Record Appointment Outcome functionality if needed
+                aorADD.addAppointmentOutcomeRecord(getHospitalID());
             case 8:
                 changePassword(FilePaths.STAFF_LIST_PATH);
                 break;

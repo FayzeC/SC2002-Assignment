@@ -1,5 +1,7 @@
 package roles;
 
+import appointmentoutcomerecordsystem.AdminAORView;
+import appointmentoutcomerecordsystem.AdminAORUpdate;
 import filemanager.FilePaths;
 import inventorysystem.AdminInventory;
 import java.io.IOException;
@@ -13,6 +15,8 @@ public class Administrator extends User {
 
     public static final int LOGOUT_OPTION = 6; // Define a constant for logout option
     private String age;
+    private AdminAORView aorView = new AdminAORView();
+    private AdminAORUpdate aorUpdate = new AdminAORUpdate();
     AdministratorInvMenu invMenu = new AdministratorInvMenu();
     AdminInventory aInventory = invMenu.aInventory;
 
@@ -31,6 +35,8 @@ public class Administrator extends User {
                          boolean firstLogin) {
         super(hospitalID, name, password, role, gender, firstLogin);
         this.age = age;
+        this.aorView = new AdminAORView();
+        this.aorUpdate = new AdminAORUpdate();
     }
 
     /**
@@ -61,6 +67,7 @@ public class Administrator extends User {
             case 1:
                 break;
             case 2:
+                aorView.viewAppointmentOutcomeRecord("approved");
                 break;
             case 3:
                 invMenu.displayMenu();

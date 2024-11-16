@@ -1,7 +1,9 @@
 package roles;
 
-import filemanager.FilePaths;
+import appointmentoutcomerecordsystem.PharmacistAORUpdate;
+import appointmentoutcomerecordsystem.PharmacistAORView;
 import inventorysystem.PharmaInventory;
+import filemanager.FilePaths;
 import java.io.IOException;
 
 /**
@@ -12,6 +14,8 @@ import java.io.IOException;
 public class Pharmacist extends User {
     public static final int LOGOUT_OPTION = 6; // Define a constant for logout option
     private String age;
+    private PharmacistAORView aorView = new PharmacistAORView();
+    private PharmacistAORUpdate aorUpdate = new PharmacistAORUpdate();
     PharmaInventory pInventory = new PharmaInventory(); // Inventory manager for pharmacy
 
     /**
@@ -29,6 +33,8 @@ public class Pharmacist extends User {
                       boolean firstLogin) {
         super(hospitalID, name, password, role, gender, firstLogin);
         this.age = age;
+        this.aorView = new PharmacistAORView();
+        this.aorUpdate = new PharmacistAORUpdate();
     }
 
     /**
@@ -58,10 +64,10 @@ public class Pharmacist extends User {
     public void handleOption(int option) throws IOException {
         switch (option) {
             case 1:
-                // Implement action to view appointment outcome records
+                aorView.viewAppointmentOutcomeRecord("pending");
                 break;
             case 2:
-                // Implement action to update prescription status
+                aorUpdate.approveAppointmentOutcomeRecord();
                 break;
             case 3:
                 pInventory.viewInventory(); // View the medication inventory
