@@ -6,17 +6,14 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.List;
 
-public class PharmaInventory extends InventoryManagement {
+public class PharmaInventory extends InventoryManagement{
 
     public PharmaInventory() {
         super();
     }
 
-    public void submitReplenishRequest() {
-        sendReplenishRequest(); // Call the private method
-    }
 
-    private void sendReplenishRequest() {
+    public void sendReplenishRequest() {
         CSVInventory inventoryUpdater = new CSVInventory();
         Scanner sc = new Scanner(System.in);
         System.out.print("\nEnter Name of Item to be updated: ");
