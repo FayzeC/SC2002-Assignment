@@ -106,43 +106,4 @@ public class CSVDataLoader {
         }
         return patients;
     }
-
-    /**
-     * Loads appointment data from a CSV file. Each appointment is parsed into an `Appointment`
-     * object and added to the list of appointments.
-     *
-     * @param filePath the file path to the CSV file containing appointment data
-     * @return a list of Appointment objects
-     * @throws IOException if an error occurs while reading the file
-     */
-    public static List<Appointment> loadAppointments(String filePath) throws IOException {
-        List<Appointment> appointments = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            boolean isFirstRow = true;
-
-            while ((line = br.readLine()) != null) {
-                if (isFirstRow) { // Skip header row
-                    isFirstRow = false;
-                    continue;
-                }
-
-                String[] fields = line.split(",");
-                String appointmentID = fields[0].trim();
-                String appointmentDate = fields[1].trim();
-                String appointmentTime = fields[2].trim();
-                String patientID = fields[3].trim();
-                String patientName = fields[4].trim();
-                String doctorID = fields[5].trim();
-                String doctorName = fields[6].trim();
-                String status = fields[7].trim();
-
-                // Create and add the Appointment object
-                Appointment appointment = new Appointment(appointmentID, appointmentDate, appointmentTime, patientID, patientName, doctorID, doctorName, status);
-                appointments.add(appointment);
-            }
-        }
-        return appointments;
-    }
 }
