@@ -1,7 +1,7 @@
 package roles;
 
 import filemanager.CSVUpdater;
-// import org.mindrot.jbcrypt.BCrypt; // uncomment this during submission
+import org.mindrot.jbcrypt.BCrypt; // uncomment this during submission
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -57,9 +57,9 @@ public abstract class User {
     //  * @return The hashed password
     //  */
     // Hash password using BCrypt (uncomment this during submission)
-//    private String hashPassword(String password) {
-//        return BCrypt.hashpw(password, BCrypt.gensalt());
-//    }
+    private String hashPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
 
     /**
      * Changes the user's password after validating the new password.
@@ -176,7 +176,7 @@ public abstract class User {
      */
     public void setFirstLogin(String filePath) throws IOException {
         firstLogin = false;
-        CSVUpdater.updater(filePath, hospitalID, null, "First Login", "No", 0, 0);
+        CSVUpdater.updater(filePath, hospitalID, null, "FirstLogin", "No", 0, 0);
     }
 
     /**
