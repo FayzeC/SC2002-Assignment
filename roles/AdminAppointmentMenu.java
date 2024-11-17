@@ -67,7 +67,7 @@ public class AdminAppointmentMenu {
             switch (choice) {
                 case 1 -> appointmentService.viewAllAppointments(); // View all appointments
                 case 2 -> {
-                    System.out.print("Enter appointment status (e.g., confirmed, pending, completed): ");
+                    System.out.print("Enter appointment status (e.g., unreserved, completed): ");
                     String status = scanner.nextLine().toUpperCase(); // Convert input to uppercase for uniformity
                     appointmentService.viewAppointmentsByStatus(status); // View appointments by status
                 }
