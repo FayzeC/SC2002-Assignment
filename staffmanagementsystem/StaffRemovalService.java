@@ -22,7 +22,7 @@ public class StaffRemovalService {
 
         if (removed) {
             // If removal is successful, print a confirmation message
-            System.out.println("Staff member with ID " + id + " has been removed.");
+            System.out.println(" ");
         } else {
             // If no matching staff member is found, print an error message
             System.out.println("No staff member with ID " + id + " found.");
