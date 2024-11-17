@@ -4,8 +4,37 @@ import filemanager.FilePaths;
 import java.io.IOException;
 import java.util.List;
 
-public class PatientAORView implements viewOutcomeRecord{
-    // View appointment outcome records for this specific patient
+/**
+ * The {@code PatientAORView} class allows patients to view their appointment outcome records.
+ * It provides functionality to load and display records specific to a patient from the CSV file.
+ *
+ * This class implements the {@code viewOutcomeRecord} interface to enable patients to:
+ * <ul>
+ *     <li>Load all appointment outcome records from a file.</li>
+ *     <li>Filter and display records based on the provided patient ID.</li>
+ * </ul>
+ *
+ * @see filemanager.FilePaths
+ * @see AppointmentOutcomeRecord
+ * @see CSVAppointmentOutcomeRecord
+ */
+public class PatientAORView implements viewOutcomeRecord {
+
+    /**
+     * Displays all appointment outcome records associated with the given patient ID.
+     *
+     * <p>
+     * The method retrieves appointment outcome records from the CSV file specified in
+     * {@link FilePaths#APPOINTMENT_OUTCOME_RECORD_PATH}, filters them by the given patient ID,
+     * and displays the matching records in a formatted manner.
+     * </p>
+     *
+     * <p>
+     * If no matching records are found, the method notifies the user.
+     * </p>
+     *
+     * @param patientID the unique identifier of the patient whose records need to be displayed
+     */
     @Override
     public void viewAppointmentOutcomeRecord(String patientID) {
         try {

@@ -13,7 +13,24 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Scanner;
 
-
+/**
+ * The {@code DoctorAORAdd} class is responsible for adding new appointment outcome records to the system.
+ * It interacts with appointment records, inventory records, and updates statuses in the system.
+ *
+ * This class implements the {@code addOutcomeRecord} interface to provide functionality
+ * for managing appointment outcomes, including:
+ * <ul>
+ *     <li>Finding appointment details based on an appointment ID.</li>
+ *     <li>Gathering additional details such as medication, quantity, service, and consultation notes.</li>
+ *     <li>Updating the status of the appointment to "COMPLETED".</li>
+ *     <li>Adding a new appointment outcome record to the CSV file.</li>
+ * </ul>
+ *
+ * @see filemanager.FilePaths
+ * @see filemanager.CSVUpdater
+ * @see inventorysystem.CSVInventory
+ * @see inventorysystem.Inventory
+ */
 public class DoctorAORAdd implements addOutcomeRecord {
 
     private String patientID;
@@ -24,6 +41,15 @@ public class DoctorAORAdd implements addOutcomeRecord {
     private String consultationNotes;
     private String apptStatus = "";
 
+    /**
+     * Finds and verifies the details of an appointment based on the given appointment ID and doctor ID.
+     *
+     * @param appointmentID the unique identifier for the appointment
+     * @param doctorID      the unique identifier for the doctor assigned to the appointment
+     * @throws IOException              if there is an error reading the appointment file
+     * @throws IllegalArgumentException if the appointment is not found, does not belong to the doctor,
+     *                                  or the appointment file does not exist
+     */
     private void findAppointmentDetails(String appointmentID, String doctorID) throws IOException {
         File file = new File(FilePaths.APPOINTMENT_LIST_PATH);
 
@@ -70,6 +96,12 @@ public class DoctorAORAdd implements addOutcomeRecord {
         }
     }
 
+    /**
+     * Collects additional details such as service type, medications, quantities, and consultation notes
+     * for the appointment outcome record. Also validates the user input.
+     *
+     * @throws IOException if there is an error loading inventory details
+     */
     private void additionalDetails() throws IOException {
         Scanner scanner = new Scanner(System.in);
 
@@ -190,6 +222,12 @@ public class DoctorAORAdd implements addOutcomeRecord {
         }
     }
 
+    /**
+     * Changes the status of the specified appointment to "COMPLETED" in the appointment list CSV file.
+     *
+     * @param appointmentID the unique identifier for the appointment
+     * @throws IOException if there is an error updating the appointment file
+     */
     private void changeAppointmentStatus(String appointmentID) throws IOException {
         try {
             // Call CSVDataUpdater to change the status to "COMPLETED"
@@ -208,6 +246,18 @@ public class DoctorAORAdd implements addOutcomeRecord {
 
     }
 
+    /**
+     * Adds a new appointment outcome record to the system, including:
+     * <ul>
+     *     <li>Validating the appointment details.</li>
+     *     <li>Collecting additional details required for the outcome record.</li>
+     *     <li>Updating the appointment status to "COMPLETED".</li>
+     * </ul>
+     *
+     * @param doctorID the unique identifier for the doctor adding the outcome record
+     * @throws IOException              if there is an error interacting with the CSV files
+     * @throws IllegalArgumentException if invalid inputs are provided or required details are missing
+     */
     public void addAppointmentOutcomeRecord(String doctorID) throws IOException {
         Scanner scanner = new Scanner(System.in);
         try{
