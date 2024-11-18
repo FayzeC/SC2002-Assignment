@@ -25,8 +25,5 @@ public class Inventory {
 
     public void print() {
         System.out.printf("%-15s %-15s %-15s\n", medicineName, initialStock, lowStockAlert);
-//        System.out.println("Medicine Name: " + medicineName);
-//        System.out.println("Initial Stock: " + initialStock);
-//        System.out.println("Low Stock Alert: " + lowStockAlert);
     }
 }
