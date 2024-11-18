@@ -168,7 +168,7 @@ public abstract class User {
      */
     public void setFirstLogin(String filePath) throws IOException {
         firstLogin = false;
-        CSVUpdater.updater(filePath, hospitalID, null, "First Login", "No", 0, 0);
+        CSVUpdater.updater(filePath, hospitalID, null, "FirstLogin", "No", 0, 0);
     }
 
     /**
