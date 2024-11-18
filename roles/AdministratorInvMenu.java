@@ -40,7 +40,6 @@ public class AdministratorInvMenu {
                     aInventory.removeInventoryItem();
                     break;
                 case 3:
-                    //aInventory.updateInventoryItem();
                     aorUpdate.dispenseMedicationAndUpdateInventory();
                     break;
                 case 4:
