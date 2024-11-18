@@ -10,8 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AdminInventory extends InventoryManagement {
-
+    CSVInventory inventoryUpdater = new CSVInventory();
     Scanner sc = new Scanner(System.in);
+
     public AdminInventory() {
         super(); // Call the parameterized constructor of InventoryManagement
     }
@@ -72,34 +73,6 @@ public class AdminInventory extends InventoryManagement {
             System.out.println(e.getMessage());
         }
     }
-
-    // Method to update the stock level of an existing item
-    public void updateInventoryItem() {
-        System.out.print("\nEnter Name of Item to be updated: ");
-        String name = sc.nextLine();
-
-        String stock;
-        while (true) {
-            System.out.print("\nEnter updated stock (integer only): ");
-            stock = sc.nextLine();
-
-            // Validate if the input is an integer
-            try {
-                Integer.parseInt(stock);
-                break; // Exit loop if the input is valid
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid integer.");
-            }
-        }
-
-        try {
-            // Update the stock column for the specified item
-            inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, name, "Initial Stock", stock);
-        } catch (IOException e) {
-            System.err.println("Failed to update stock: " + e.getMessage());
-        }
-    }
-
 
     // Method to update the low stock alert level for an existing item
     public void updateLowStockAlert() {
