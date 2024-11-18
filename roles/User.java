@@ -74,6 +74,8 @@ public abstract class User {
             String newPassword = scanner.nextLine();
             if (!validatePassword(newPassword)) {
                 System.out.println("Password must be at least 8 characters long and contain at least one uppercase letter, one special character and one number.");
+            }else if (BCrypt.checkpw(newPassword, this.password)) { // Verify new password against old hash
+                System.out.println("New password cannot be the same as the old password. Please try again.");
             }else{
                 this.password = hashPassword(newPassword);
                 System.out.println("Password changed successfully.");
