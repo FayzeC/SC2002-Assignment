@@ -1,0 +1,5 @@
+HospitalID,Name,Password,Role,Gender,Age,FirstLogin
+D001,John Smith,$2a$10$Kfz7/T8kaZRltyBIjJ8eEOQjHafRj91VGD.A7VWAO5fymy6aYunYa,Doctor,Male,45,Yes
+D002,Emily Clarke,$2a$10$Kfz7/T8kaZRltyBIjJ8eEOQjHafRj91VGD.A7VWAO5fymy6aYunYa,Doctor,Female,38,Yes
+P001,Mark Lee,$2a$10$Kfz7/T8kaZRltyBIjJ8eEOQjHafRj91VGD.A7VWAO5fymy6aYunYa,Pharmacist,Male,29,Yes
+A001,Sarah Lee,$2a$10$Kfz7/T8kaZRltyBIjJ8eEOQjHafRj91VGD.A7VWAO5fymy6aYunYa,Administrator,Female,40,Yes

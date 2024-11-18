@@ -1,0 +1,4 @@
+Patient ID,Name,Password,Date of Birth,Gender,Blood Type,Contact Information,Doctor Assigned,Past Diagnosis,Past Treatment,FirstLogin
+P1001,Emilia Clarke,$2a$10$Kfz7/T8kaZRltyBIjJ8eEOQjHafRj91VGD.A7VWAO5fymy6aYunYa,1/1/2001,Female,A-,emilia.clarke@.com,NA,NA,NA,Yes
+P1002,Bob Stone,$2a$10$Kfz7/T8kaZRltyBIjJ8eEOQjHafRj91VGD.A7VWAO5fymy6aYunYa,11/22/1975,Male,B+,bob.stone@example.com,NA,NA,NA,Yes
+P1003,Charlie White,$2a$10$Kfz7/T8kaZRltyBIjJ8eEOQjHafRj91VGD.A7VWAO5fymy6aYunYa,7/8/1990,Male,O-,charlie.white@example.com,NA,NA,NA,Yes

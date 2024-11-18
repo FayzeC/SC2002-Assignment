@@ -1,0 +1,6 @@
+HospitalID,Name,Password,Role,Gender,Age,FirstLogin
+D001,John Smith,password,Doctor,Male,45,Yes
+D002,Emily Clarke,password,Doctor,Female,38,Yes
+P001,Mark Lee,Testtest123!,Pharmacist,Male,29,No
+A001,Sarah Lee,Testtest123!,Administrator,Female,40,No
+A003,Joe,$2a$10$FefNq7hj0rRJzeKY4eaI8er0jZdoUmGMuGkk8NHvwEcFMdmQZDLX6,Administrator,Male,29,Yes
