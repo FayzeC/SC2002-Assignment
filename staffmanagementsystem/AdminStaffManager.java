@@ -1,5 +1,6 @@
 package staffmanagementsystem;
 
+import org.mindrot.jbcrypt.BCrypt;
 import roles.Administrator;
 import roles.Doctor;
 import roles.Pharmacist;
@@ -21,8 +22,8 @@ public class AdminStaffManager implements StaffManager {
     private final List<User> staffList;                // In-memory list of staff members
     private final StaffRepository staffRepository;     // For loading/saving staff data
     StaffValidator validator;                          // For validating input data
-    private StaffCreationService staffCreationService; // Service for creating staff members
-    private StaffRemovalService staffRemovalService;   // Service for removing staff members
+
+
 
     /**
      * Constructs an instance of AdminStaffManager with dependencies for staff management.
@@ -35,8 +36,6 @@ public class AdminStaffManager implements StaffManager {
         this.staffRepository = staffRepository; // Assign repository dependency
         this.staffDisplay = staffDisplay;       // Assign display dependency
         this.staffList = new ArrayList<>(staffRepository.loadAllStaff()); // Load staff list
-        this.staffCreationService = new StaffCreationService();
-        this.staffRemovalService = new StaffRemovalService();
         this.validator = new StaffValidator();
     }
 
@@ -188,11 +187,13 @@ public class AdminStaffManager implements StaffManager {
         System.out.print("Enter Age: ");
         String age = scanner.nextLine();
 
-        // Default password setup
-        String password = "defaultPassword";
+        // Default password setup and hash password
+        String password = "password";
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
         // Use StaffCreationService to create the new staff member
-        User newUser = staffCreationService.createStaffMember(id, role, name, gender, age, password);
+        
+        User newUser = StaffCreationService.createStaffMember(id, role, name, gender, age, hashedPassword, true);
 
         // Add the new user to the staff list and save the updated list
         staffList.add(newUser);
@@ -307,9 +308,10 @@ public class AdminStaffManager implements StaffManager {
         }
 
         // Step 4: Create the updated staff member using StaffCreationService
-        User updatedStaff = staffCreationService.createStaffMember(
-                updatedId, updatedRole, updatedName, updatedGender, updatedAge, staffToUpdate.getPassword()
+        User updatedStaff = StaffCreationService.createStaffMember(
+                updatedId, updatedRole, updatedName, updatedGender, updatedAge, staffToUpdate.getPassword(), false
         );
+
 
         // Step 5: Remove the old user and add the updated user
         StaffRemovalService.removeStaffById(staffToUpdate.getHospitalID(), staffList);

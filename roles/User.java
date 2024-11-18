@@ -1,7 +1,7 @@
 package roles;
 
 import filemanager.CSVUpdater;
-import org.mindrot.jbcrypt.BCrypt; // uncomment this during submission
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -50,13 +50,12 @@ public abstract class User {
         return Pattern.matches(passwordPattern, password);
     }
 
-    // /**
-    //  * Hashes the password using BCrypt for secure storage.
-    //  *
-    //  * @param password The password to hash
-    //  * @return The hashed password
-    //  */
-    // Hash password using BCrypt (uncomment this during submission)
+     /**
+      * Hashes the password using BCrypt for secure storage.
+      *
+      * @param password The password to hash
+      * @return The hashed password
+      */
     private String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
@@ -76,30 +75,23 @@ public abstract class User {
             if (!validatePassword(newPassword)) {
                 System.out.println("Password must be at least 8 characters long and contain at least one uppercase letter, one special character and one number.");
             }else{
-//                this.password = hashPassword(newPassword); // uncomment this during submission
-                 this.password = newPassword; // remove this during submission
+                this.password = hashPassword(newPassword);
                 System.out.println("Password changed successfully.");
-//                CSVUpdater.updater(filePath, hospitalID, null, "Password", this.password, 0, 0); // uncomment this during submission
-                CSVUpdater.updater(filePath, hospitalID, null, "Password", newPassword, 0, 0); // remove this during submission
+                CSVUpdater.updater(filePath, hospitalID, null, "Password", this.password, 0, 0);
                 break;
             }
         }while(true);
     }
 
-    // Method to authenticate user (remove this function during submission)
+     /**
+      * Authenticates the user by comparing the provided password with the hashed password.
+      *
+      * @param password The password entered by the user
+      * @return true if the password matches, false otherwise
+      */
     public boolean authenticate(String password) {
-        return this.password.equals(password);
+        return BCrypt.checkpw(password, this.password);  // Compares plain-text password with hashed password
     }
-
-    // /**
-    //  * Authenticates the user by comparing the provided password with the hashed password.
-    //  *
-    //  * @param password The password entered by the user
-    //  * @return true if the password matches, false otherwise
-    //  */
-//    public boolean authenticate(String password) {
-//        return BCrypt.checkpw(password, this.password);  // Compares plain-text password with hashed password
-//    }
 
     /**
      * Abstract method to display the user menu.

@@ -1,6 +1,5 @@
 package base;
 
-import appointmentsystem.Appointment;
 import filemanager.CSVDataLoader;
 import filemanager.FilePaths;
 import roles.*;
@@ -29,7 +28,7 @@ public class AuthService {
     }
 
     /**
-     * Loads user data and appointment records from CSV files.
+     * Loads user data from CSV files.
      * Clears the existing lists before loading new data.
      *
      * @throws IOException if an error occurs during data loading
@@ -85,7 +84,6 @@ public class AuthService {
 
         // Authenticate if user is found
         if (user != null && user.authenticate(password)) {
-            String choice;
             System.out.println("Login successful. Welcome " + user + "!");
 
             // Check if it is the user's first login

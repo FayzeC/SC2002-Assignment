@@ -1,7 +1,5 @@
 package filemanager;
 
-import appointmentsystem.Appointment;
-import base.*;
 import roles.*;
 
 import java.io.BufferedReader;
