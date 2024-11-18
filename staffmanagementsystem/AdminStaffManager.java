@@ -21,8 +21,8 @@ public class AdminStaffManager implements StaffManager {
     private final List<User> staffList;                // In-memory list of staff members
     private final StaffRepository staffRepository;     // For loading/saving staff data
     StaffValidator validator;                          // For validating input data
-    private StaffCreationService staffCreationService; // Service for creating staff members
-    private StaffRemovalService staffRemovalService;   // Service for removing staff members
+
+
 
     /**
      * Constructs an instance of AdminStaffManager with dependencies for staff management.
@@ -35,8 +35,6 @@ public class AdminStaffManager implements StaffManager {
         this.staffRepository = staffRepository; // Assign repository dependency
         this.staffDisplay = staffDisplay;       // Assign display dependency
         this.staffList = new ArrayList<>(staffRepository.loadAllStaff()); // Load staff list
-        this.staffCreationService = new StaffCreationService();
-        this.staffRemovalService = new StaffRemovalService();
         this.validator = new StaffValidator();
     }
 
@@ -192,7 +190,7 @@ public class AdminStaffManager implements StaffManager {
         String password = "defaultPassword";
 
         // Use StaffCreationService to create the new staff member
-        User newUser = staffCreationService.createStaffMember(id, role, name, gender, age, password);
+        User newUser = StaffCreationService.createStaffMember(id, role, name, gender, age, password);
 
         // Add the new user to the staff list and save the updated list
         staffList.add(newUser);
@@ -307,7 +305,7 @@ public class AdminStaffManager implements StaffManager {
         }
 
         // Step 4: Create the updated staff member using StaffCreationService
-        User updatedStaff = staffCreationService.createStaffMember(
+        User updatedStaff = StaffCreationService.createStaffMember(
                 updatedId, updatedRole, updatedName, updatedGender, updatedAge, staffToUpdate.getPassword()
         );
 
