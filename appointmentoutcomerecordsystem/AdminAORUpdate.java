@@ -4,7 +4,8 @@ import filemanager.FilePaths;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
-
+import inventorysystem.CSVInventory;
+import inventorysystem.Inventory;
 /**
  * The {@code AdminAORUpdate} class implements the {@code updateOutcomeRecord} interface
  * to provide functionality for updating appointment outcome records.
@@ -52,40 +53,94 @@ public class AdminAORUpdate implements updateOutcomeRecord {
      *
      * @throws IOException if an error occurs while reading or writing the appointment outcome records.
      */
-    public void dispenseAppointmentOutcomeRecord() {
+    public void dispenseMedicationAndUpdateInventory() {
+        Scanner scanner = new Scanner(System.in);
+
         try {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter the Appointment ID to dispense: ");
+            // Prompt for appointment ID
+            System.out.print("Enter the Appointment ID: ");
             String appointmentID = scanner.nextLine().trim();
 
-            // Load appointment outcome records to find the record with the specified appointment ID
+            // Load appointment outcome records
             List<AppointmentOutcomeRecord> records = CSVAppointmentOutcomeRecord.loadApptOutcomeRecord(FilePaths.APPOINTMENT_OUTCOME_RECORD_PATH);
             AppointmentOutcomeRecord targetRecord = null;
 
             for (AppointmentOutcomeRecord record : records) {
                 if (record.getAppointmentID().equals(appointmentID)) {
-                    targetRecord = record;
-                    break;
+                    if(record.getStatus().equalsIgnoreCase("APPROVED")) {
+                        targetRecord = record;
+                        break;
+                    } else if (record.getStatus().equalsIgnoreCase("DISPENSED")) {
+                        throw new IllegalArgumentException("Medication has already been dispensed for Appointment ID " + appointmentID);
+                    } else if (record.getStatus().equalsIgnoreCase("PENDING")) {
+                        throw new IllegalArgumentException("Medication has not been approved for Appointment ID " + appointmentID);
+                    }
                 }
             }
 
             if (targetRecord == null) {
-                System.out.println("Error: " + appointmentID + " not found in the records.");
+                throw new IllegalArgumentException ("Error: Appointment ID not found.");
+            }
+
+            // Display medication and quantity
+            String medication = targetRecord.getMedication();
+            String quantity = targetRecord.getQuantity();
+
+            if ("none".equalsIgnoreCase(medication)) {
+                System.out.println("No medication found for Appointment ID " + appointmentID);
+                updateAppointmentOutcomeRecord(appointmentID, "Status", "DISPENSED");
                 return;
             }
 
-            // Check if the current status is "APPROVED" before updating to "DISPENSED"
-            if (targetRecord.getStatus().equalsIgnoreCase("PENDING")) {
-                System.out.println(appointmentID + " has yet to be APPROVED.");
-            } else if (targetRecord.getStatus().equalsIgnoreCase("DISPENSED")) {
-                System.out.println(appointmentID + " has already been DISPENSED.");
-            } else {
-                // Update the status to "DISPENSED"
-                updateAppointmentOutcomeRecord(appointmentID, "Status", "DISPENSED");
+            System.out.println("Medication: " + medication);
+            System.out.println("Quantity: " + quantity);
+
+            // Confirm with the user
+            System.out.print("Do you want to dispense this medication? Type 'yes' to confirm: ");
+            String confirmation = scanner.nextLine().trim();
+
+            if (!"yes".equalsIgnoreCase(confirmation)) {
+                System.out.println("Operation cancelled.");
+                return;
             }
 
+            // Load inventory and update stock
+            List<Inventory> inventoryList = CSVInventory.loadInventory(FilePaths.INVENTORY_LIST_PATH);
+            String[] medications = medication.split("/");
+            String[] quantities = quantity.split("/");
+
+            for (int i = 0; i < medications.length; i++) {
+                String med = medications[i].trim();
+                int qty = Integer.parseInt(quantities[i].trim());
+                boolean medicineFound = false;
+
+                for (Inventory item : inventoryList) {
+                    if (item.getMedicineName().equalsIgnoreCase(med)) {
+                        if (item.getInitialStock() < qty) {
+                            throw new IllegalArgumentException ("Insufficient stock for " + med);
+                        }
+
+                        // Update inventory
+                        int newStock = item.getInitialStock() - qty;
+                        CSVInventory.updateInventory(FilePaths.INVENTORY_LIST_PATH, med, "Initial Stock", String.valueOf(newStock));
+                        System.out.println("Dispensed " + qty + " units of " + med + ". Updated stock: " + newStock);
+                        medicineFound = true;
+                        break;
+                    }
+                }
+
+                if (!medicineFound) {
+                    throw new IllegalArgumentException ("Medicine " + med + " not found in the inventory.");
+                }
+            }
+
+            // Update the appointment outcome record status to DISPENSED
+            updateAppointmentOutcomeRecord(appointmentID, "Status", "DISPENSED");
+
         } catch (IOException e) {
-            System.out.println("Error loading appointment outcome records: " + e.getMessage());
+            System.out.println("Error processing request: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Error in medication quantity format: " + e.getMessage());
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }

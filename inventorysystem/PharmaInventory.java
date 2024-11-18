@@ -7,14 +7,14 @@ import java.util.Scanner;
 import java.util.List;
 
 public class PharmaInventory extends InventoryManagement{
-
+    CSVInventory inventoryUpdater = new CSVInventory();
     public PharmaInventory() {
         super();
     }
 
 
     public void sendReplenishRequest() {
-        CSVInventory inventoryUpdater = new CSVInventory();
+
         Scanner sc = new Scanner(System.in);
         System.out.print("\nEnter Name of Item to be updated: ");
         String name = sc.nextLine();

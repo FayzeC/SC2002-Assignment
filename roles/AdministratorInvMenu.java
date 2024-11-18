@@ -1,6 +1,7 @@
 package roles;
 
 import inventorysystem.AdminInventory;
+import appointmentoutcomerecordsystem.AdminAORUpdate;
 
 import java.util.Scanner;
 
@@ -9,6 +10,7 @@ import java.util.Scanner;
  * Provides options to add, remove, update, and view medication inventory.
  */
 public class AdministratorInvMenu {
+    private AdminAORUpdate aorUpdate = new AdminAORUpdate();
 
     AdminInventory aInventory = new AdminInventory();
 
@@ -38,7 +40,8 @@ public class AdministratorInvMenu {
                     aInventory.removeInventoryItem();
                     break;
                 case 3:
-                    aInventory.updateInventoryItem();
+                    //aInventory.updateInventoryItem();
+                    aorUpdate.dispenseMedicationAndUpdateInventory();
                     break;
                 case 4:
                     aInventory.updateLowStockAlert();

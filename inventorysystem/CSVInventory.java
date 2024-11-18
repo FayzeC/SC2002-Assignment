@@ -58,7 +58,7 @@ public class CSVInventory {
         throw new IllegalArgumentException("Medicine name \"" + medicineName + "\" not found in the CSV file.");
     }
 
-    public void updateInventory(String filePath, String medicineName, String header, String newValue)
+    public static void updateInventory(String filePath, String medicineName, String header, String newValue)
             throws IOException {
         List<String[]> lines = new ArrayList<>();
         int headerIndex = -1;

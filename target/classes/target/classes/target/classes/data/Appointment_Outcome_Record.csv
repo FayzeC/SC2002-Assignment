@@ -1,3 +1,4 @@
-Appointment ID,Patient ID,Doctor Assigned,Appointment Date,Service,Medication,Consultation Notes
-PA1001,P1001,D001,test,test,test,test
-PA1002,P1002,D001,test,test,test,test
+Appointment ID,Patient ID,Doctor Assigned,Appointment Date,Service,Medication,Quantity,Status,Consultation Notes
+PA1,P1001,D001,2024-11-24,Consultation,Paracetamol,2,APPROVED,Drink plenty of water and get enough sleep
+PA10,P1002,D002,2024-11-24,Physiotherapy,none,0,PENDING,NIL
+PA4,P1002,D001,2024-11-26,X-Ray,Paracetamol/Amoxicillin,4/6,APPROVED,If still feeling unwell after 3 days, please visit the doctor again
