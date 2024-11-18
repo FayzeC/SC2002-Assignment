@@ -10,9 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AdminInventory extends InventoryManagement {
-    CSVInventory inventoryUpdater = new CSVInventory();
-    Scanner sc = new Scanner(System.in);
 
+    Scanner sc = new Scanner(System.in);
     public AdminInventory() {
         super(); // Call the parameterized constructor of InventoryManagement
     }

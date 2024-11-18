@@ -7,7 +7,6 @@ import java.util.Scanner;
 import java.util.List;
 
 public class PharmaInventory extends InventoryManagement{
-    CSVInventory inventoryUpdater = new CSVInventory();
     public PharmaInventory() {
         super();
     }

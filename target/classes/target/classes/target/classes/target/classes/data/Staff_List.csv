@@ -1,5 +1,0 @@
-Staff ID,Name,Password,Role,Gender,Age,First Login
-D001,John Smith,password,basic.Doctor,Male,45,Yes
-D002,Emily Clarke,password,basic.Doctor,Female,38,Yes
-P001,Mark Lee,Testtest123!,basic.Pharmacist,Male,29,No
-A001,Sarah Lee,Testtest123!,basic.Administrator,Female,40,No

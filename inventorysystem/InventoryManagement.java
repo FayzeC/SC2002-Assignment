@@ -7,7 +7,7 @@ import java.util.List;
 
 public class InventoryManagement {
     private List<Inventory> inventoryList;
-
+    CSVInventory inventoryUpdater = new CSVInventory();
     public InventoryManagement() {
         try {
             this.inventoryList = CSVInventory.loadInventory(FilePaths.INVENTORY_LIST_PATH); // Load inventory list from CSV
