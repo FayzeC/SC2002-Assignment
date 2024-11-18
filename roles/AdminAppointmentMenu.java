@@ -3,7 +3,7 @@ package roles;
 import java.util.Scanner;
 
 import appointmentoutcomerecordsystem.AdminAORView;
-import appointmentsystem.AdminAppointmentView;
+import appointmentsystem.adminViewAppointment;
 
 /**
  * The AdminAppointmentMenu class provides a user interface for administrators
@@ -16,9 +16,9 @@ import appointmentsystem.AdminAppointmentView;
 public class AdminAppointmentMenu {
 
     /**
-     * The {@link AdminAppointmentView} instance for managing appointment views.
+     * The {@link adminViewAppointment} instance for managing appointment views.
      */
-    private final AdminAppointmentView appointmentService;
+    private final adminViewAppointment appointmentService;
 
     /**
      * The {@link AdminAORView} instance for viewing appointment outcome records.
@@ -31,7 +31,7 @@ public class AdminAppointmentMenu {
      * @param appointmentService The service for managing and viewing appointments.
      * @param aorView The service for managing and viewing appointment outcome records.
      */
-    public AdminAppointmentMenu(AdminAppointmentView appointmentService, AdminAORView aorView) {
+    public AdminAppointmentMenu(adminViewAppointment appointmentService, AdminAORView aorView) {
         this.appointmentService = appointmentService;
         this.aorView = aorView;
     }
@@ -67,7 +67,7 @@ public class AdminAppointmentMenu {
             switch (choice) {
                 case 1 -> appointmentService.viewAllAppointments(); // View all appointments
                 case 2 -> {
-                    System.out.print("Enter appointment status (e.g., unreserved, completed): ");
+                    System.out.print("Enter appointment status (e.g. pending, unreserved, completed): ");
                     String status = scanner.nextLine().toUpperCase(); // Convert input to uppercase for uniformity
                     appointmentService.viewAppointmentsByStatus(status); // View appointments by status
                 }
