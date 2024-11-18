@@ -1,5 +1,6 @@
 package staffmanagementsystem;
 
+import org.mindrot.jbcrypt.BCrypt;
 import roles.Administrator;
 import roles.Doctor;
 import roles.Pharmacist;
@@ -186,11 +187,13 @@ public class AdminStaffManager implements StaffManager {
         System.out.print("Enter Age: ");
         String age = scanner.nextLine();
 
-        // Default password setup
-        String password = "defaultPassword";
+        // Default password setup and hash password
+        String password = "password";
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
         // Use StaffCreationService to create the new staff member
-        User newUser = StaffCreationService.createStaffMember(id, role, name, gender, age, password);
+        
+        User newUser = StaffCreationService.createStaffMember(id, role, name, gender, age, hashedPassword, true);
 
         // Add the new user to the staff list and save the updated list
         staffList.add(newUser);
@@ -306,8 +309,9 @@ public class AdminStaffManager implements StaffManager {
 
         // Step 4: Create the updated staff member using StaffCreationService
         User updatedStaff = StaffCreationService.createStaffMember(
-                updatedId, updatedRole, updatedName, updatedGender, updatedAge, staffToUpdate.getPassword()
+                updatedId, updatedRole, updatedName, updatedGender, updatedAge, staffToUpdate.getPassword(), false
         );
+
 
         // Step 5: Remove the old user and add the updated user
         StaffRemovalService.removeStaffById(staffToUpdate.getHospitalID(), staffList);
