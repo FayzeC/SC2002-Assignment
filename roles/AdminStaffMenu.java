@@ -12,14 +12,14 @@ import java.util.Scanner;
  * - Add new staff members.
  * - Update existing staff information.
  * - Remove staff members.
- * This class interacts with the {@link AdminStaffManager} to perform staff management operations.
+ * This class interacts with the {@link StaffManager} to perform staff management operations.
  */
 public class AdminStaffMenu {
 
     /**
      * The {@link StaffManager} instance responsible for managing staff data and operations.
      */
-    private final AdminStaffManager sManager;
+    private final StaffManager sManager;
 
     /**
      * Constructs an AdminStaffMenu with the specified AdminStaffManager instance.
@@ -27,7 +27,7 @@ public class AdminStaffMenu {
      * @param sManager The StaffManager instance for handling staff operations.
      * @throws IOException If an I/O error occurs during initialization.
      */
-    public AdminStaffMenu(AdminStaffManager sManager) throws IOException {
+    public AdminStaffMenu(StaffManager sManager) throws IOException {
         this.sManager = sManager;
     }
 
