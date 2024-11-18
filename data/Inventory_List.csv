@@ -1,5 +1,4 @@
 Medicine Name,Initial Stock,Low Stock Level Alert,Replenish Request
-Paracetamol,4,20,1
+Paracetamol,40,20,1
 Ibuprofen,50,10,0
-Amoxicillin,69,15,0
-NewDrug,210,200,0
+Amoxicillin,70,15,0

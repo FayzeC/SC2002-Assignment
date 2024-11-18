@@ -1,7 +1,4 @@
-Patient ID,Name,Password,Date of Birth,Gender,Blood Type,Contact Information,Doctor Assigned,Past Diagnosis,Past Treatment,First Login
-P1001,Faye,Password123!,1/1/2001,Female,A-,aa@.com,D001,Fever,jcfgr,No
-P1002,Bob Stone,Password123!,11/22/1975,Male,B+,bob.stone@example.com,D001,anything,everything,No
-P1003,Charlie White,Password123!,7/8/1990,Male,O-,charlie.white@example.com,NA,NA,NA,No
-P1001,Faye,Password123!,1/1/2001,Female,A-,aa@.com,D002,NA,NA,No
-P1002,Bob Stone,Password123!,11/22/1975,Male,B+,bob.stone@example.com,D002,NA,NA,No
-P1001,Faye,Password123!,1/1/2001,Female,A-,aa@.com,D001,hrgfireu,fejkthbvrigk,No
+Patient ID,Name,Password,Date of Birth,Gender,Blood Type,Contact Information,Doctor Assigned,Past Diagnosis,Past Treatment,FirstLogin
+P1001,Emilia Clarke,$2a$10$Kfz7/T8kaZRltyBIjJ8eEOQjHafRj91VGD.A7VWAO5fymy6aYunYa,1/1/2001,Female,A-,emilia.clarke@.com,NA,NA,NA,Yes
+P1002,Bob Stone,$2a$10$Kfz7/T8kaZRltyBIjJ8eEOQjHafRj91VGD.A7VWAO5fymy6aYunYa,11/22/1975,Male,B+,bob.stone@example.com,NA,NA,NA,Yes
+P1003,Charlie White,$2a$10$Kfz7/T8kaZRltyBIjJ8eEOQjHafRj91VGD.A7VWAO5fymy6aYunYa,7/8/1990,Male,O-,charlie.white@example.com,NA,NA,NA,Yes
