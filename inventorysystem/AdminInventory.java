@@ -9,14 +9,26 @@ import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The AdminInventory class extends {@link InventoryManagement} and provides
+ * additional administrative functions for managing inventory. These include
+ * adding, removing, updating inventory items, and processing stock replenishment requests.
+ */
 public class AdminInventory extends InventoryManagement {
 
-    Scanner sc = new Scanner(System.in);
+    private Scanner sc = new Scanner(System.in);
+
+    /**
+     * Constructs an AdminInventory object by initializing the inventory management system.
+     */
     public AdminInventory() {
-        super(); // Call the parameterized constructor of InventoryManagement
+        super(); // Call the constructor of InventoryManagement
     }
 
-    // Method to add a new item to the inventory
+    /**
+     * Adds a new item to the inventory. Prompts the user to input the name, initial stock,
+     * and low stock alert level for the new item and updates the inventory file.
+     */
     public void addInventoryItem() {
         System.out.print("\nEnter Name of Item to be added: ");
         String name = sc.nextLine();
@@ -25,11 +37,9 @@ public class AdminInventory extends InventoryManagement {
         while (true) {
             System.out.print("\nEnter Number of Items to be added (integer only): ");
             stock = sc.nextLine();
-
-            // Validate if the input is an integer
             try {
-                Integer.parseInt(stock);
-                break; // Exit loop if the input is valid
+                Integer.parseInt(stock); // Validate if input is an integer
+                break;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid integer.");
             }
@@ -39,32 +49,30 @@ public class AdminInventory extends InventoryManagement {
         while (true) {
             System.out.print("\nEnter low stock level of Item to be added (integer only): ");
             lowStockLevel = sc.nextLine();
-
-            // Validate if the input is an integer
             try {
-                Integer.parseInt(lowStockLevel);
-                break; // Exit loop if the input is valid
+                Integer.parseInt(lowStockLevel); // Validate if input is an integer
+                break;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid integer.");
             }
         }
 
         try {
-            // Call the addInventoryItem method to add a new row
             inventoryUpdater.addInventoryItem(FilePaths.INVENTORY_LIST_PATH, name, stock, lowStockLevel);
         } catch (IOException e) {
             System.err.println("Failed to add item: " + e.getMessage());
         }
     }
 
-
-    // Method to remove an item from the inventory
+    /**
+     * Removes an item from the inventory. Prompts the user to input the name of the item
+     * to be removed and updates the inventory file.
+     */
     public void removeInventoryItem() {
         System.out.print("\nEnter Name of Item to be removed: ");
         String name = sc.nextLine();
 
         try {
-            // Call the removeInventoryItem method to delete the row
             inventoryUpdater.removeInventoryItem(FilePaths.INVENTORY_LIST_PATH, name);
         } catch (IOException e) {
             System.err.println("Failed to remove item: " + e.getMessage());
@@ -73,7 +81,10 @@ public class AdminInventory extends InventoryManagement {
         }
     }
 
-    // Method to update the stock level of an existing item
+    /**
+     * Updates the stock level of an existing inventory item. Prompts the user to input the
+     * name of the item and the updated stock level and reflects the changes in the inventory file.
+     */
     public void updateInventoryItem() {
         System.out.print("\nEnter Name of Item to be updated: ");
         String name = sc.nextLine();
@@ -82,26 +93,25 @@ public class AdminInventory extends InventoryManagement {
         while (true) {
             System.out.print("\nEnter updated stock (integer only): ");
             stock = sc.nextLine();
-
-            // Validate if the input is an integer
             try {
-                Integer.parseInt(stock);
-                break; // Exit loop if the input is valid
+                Integer.parseInt(stock); // Validate if input is an integer
+                break;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid integer.");
             }
         }
 
         try {
-            // Update the stock column for the specified item
             inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, name, "Initial Stock", stock);
         } catch (IOException e) {
             System.err.println("Failed to update stock: " + e.getMessage());
         }
     }
 
-
-    // Method to update the low stock alert level for an existing item
+    /**
+     * Updates the low stock alert level for an existing inventory item. Prompts the user
+     * to input the name of the item and the new alert level and updates the inventory file.
+     */
     public void updateLowStockAlert() {
         System.out.print("\nEnter Name of Item to be updated: ");
         String name = sc.nextLine();
@@ -110,26 +120,25 @@ public class AdminInventory extends InventoryManagement {
         while (true) {
             System.out.print("\nEnter new low stock level of Item (integer only): ");
             lowStockLevel = sc.nextLine();
-
-            // Validate if the input is an integer
             try {
-                Integer.parseInt(lowStockLevel);
-                break; // Exit loop if the input is valid
+                Integer.parseInt(lowStockLevel); // Validate if input is an integer
+                break;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid integer.");
             }
         }
 
         try {
-            // Update the low stock alert level for the specified item
             inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, name, "Low Stock Level Alert", lowStockLevel);
         } catch (IOException e) {
             System.err.println("Failed to update low stock level: " + e.getMessage());
         }
     }
 
-
-    // Method to process stock replenishment
+    /**
+     * Processes stock replenishment requests for items that have pending replenish requests.
+     * Updates the stock level for the selected item and resets the replenish request count.
+     */
     public void processReplenishRequest() {
         Map<Inventory, Integer> itemsWithRequests = new HashMap<>();
 
@@ -148,7 +157,6 @@ public class AdminInventory extends InventoryManagement {
             }
         }
 
-        // If no items have replenish requests, inform the user and return
         if (itemsWithRequests.isEmpty()) {
             System.out.println("No items have pending replenish requests.");
             return;
@@ -165,25 +173,20 @@ public class AdminInventory extends InventoryManagement {
                     + ", Amount of requests: " + replenishCount);
         }
 
-        // Prompt user to select an item to fulfill
         System.out.print("Enter the number of the item you want to fulfill: ");
         int choice = sc.nextInt();
 
-        // Validate the user's choice
         if (choice < 1 || choice > inventoryList.size()) {
             System.out.println("Invalid selection. No replenishment processed.");
             return;
         }
 
-        // Process the selected item for replenishment
         Inventory selectedInventory = inventoryList.get(choice - 1);
-        int newStockLevel = selectedInventory.getLowStockAlert() + 10; // Set stock to 10 units above the low stock alert level
+        int newStockLevel = selectedInventory.getLowStockAlert() + 10;
 
         try {
-            // Update stock level in the file
             inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, selectedInventory.getMedicineName(),
                     "Initial Stock", String.valueOf(newStockLevel));
-            // Reset the replenish request count to 0 after fulfilling
             inventoryUpdater.updateInventory(FilePaths.INVENTORY_LIST_PATH, selectedInventory.getMedicineName(),
                     "Replenish Request", "0");
             System.out.println("Replenishment processed for " + selectedInventory.getMedicineName()
@@ -193,6 +196,4 @@ public class AdminInventory extends InventoryManagement {
                     "Failed to update inventory for " + selectedInventory.getMedicineName() + ": " + e.getMessage());
         }
     }
-
-
 }
